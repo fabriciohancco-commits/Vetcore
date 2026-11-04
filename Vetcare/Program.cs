@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Vetcare.Data;
+using Vetcare.Endpoints;
 using Vetcare.Models;
 using Vetcare.Services;
 
@@ -26,10 +27,12 @@ app.UseStaticFiles();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<VetCareDbContext>();
-    db.Database.EnsureCreated();
+    VetCareDatabaseInitializer.Initialize(db);
 }
 
 var api = app.MapGroup("/api");
+
+app.MapInventarioEndpoints();
 
 api.MapGet("/propietarios", async (VetCareDbContext db) =>
     Results.Ok(await db.Propietarios.AsNoTracking().OrderBy(p => p.Apellidos).ThenBy(p => p.Nombres).ToListAsync()));

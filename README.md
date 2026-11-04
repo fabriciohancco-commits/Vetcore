@@ -1,6 +1,6 @@
 # VetCare Manager
 
-Proyecto final del curso de Desarrollo de Aplicaciones Empresariales Avanzado. VetCare Manager permite administrar propietarios y mascotas de una clínica veterinaria.
+Proyecto final del curso de Desarrollo de Aplicaciones Empresariales Avanzado. VetCare Manager permite administrar propietarios, mascotas, consultas clínicas e inventario de una clínica veterinaria.
 
 ## Requisitos
 
@@ -15,7 +15,7 @@ Desde la carpeta raíz del repositorio:
 dotnet run --project Vetcare/Vetcare.csproj --launch-profile VetCare
 ```
 
-Abre [http://localhost:5002](http://localhost:5002) para usar la interfaz. La base de datos SQLite se crea automáticamente al iniciar la aplicación.
+Abre [http://localhost:5002](http://localhost:5002) para usar la interfaz. La base de datos SQLite se crea y actualiza al iniciar la aplicación.
 
 ## Ejecutar desde Rider
 
@@ -23,11 +23,11 @@ Abre `Vetcare.sln`, selecciona el perfil **VetCare** y pulsa **Run**. El perfil 
 
 ## Funciones
 
-- Registrar, listar, editar y eliminar propietarios.
-- Registrar, listar, editar y eliminar mascotas.
-- Asociar cada mascota con su propietario.
-- Validar campos, correo, teléfono, peso y fechas.
-- Evitar eliminar propietarios que todavía tienen mascotas asociadas.
+- Registrar, listar, editar y eliminar propietarios y mascotas.
+- Registrar consultas médicas y consultar historial por mascota.
+- Generar reportes por fechas y veterinario.
+- Administrar medicinas e insumos, establecer stock mínimo y registrar entradas y salidas.
+- Conservar el historial de movimientos y bloquear salidas que superen las existencias disponibles.
 
 ## Organización
 
@@ -37,11 +37,13 @@ Vetcare/
 ├── global.json
 ├── README.md
 └── Vetcare/
-    ├── Data/                 # Contexto de Entity Framework
-    ├── Models/               # Propietario y mascota
-    ├── Properties/           # Perfiles de ejecución
-    ├── wwwroot/              # Interfaz web
-    ├── Program.cs            # Configuración y endpoints de la API
+    ├── Data/                 # Contexto e inicialización de la base de datos
+    ├── Endpoints/             # Rutas del módulo de inventario
+    ├── Models/                # Entidades y solicitudes
+    ├── Services/              # Lógica de reportes
+    ├── Properties/            # Perfiles de ejecución
+    ├── wwwroot/               # Interfaz web
+    ├── Program.cs             # Configuración de la aplicación y API
     └── Vetcare.csproj
 ```
 
