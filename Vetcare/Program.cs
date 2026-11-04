@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using Vetcare.Data;
-using Vetcare.Models;
+using Vetcare.Domain.Entities;
+using Vetcare.Infrastructure.Persistence;
 using Vetcare.Services;
 
 var builder = WebApplication.CreateBuilder(args);
