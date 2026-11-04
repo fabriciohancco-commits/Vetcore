@@ -13,7 +13,13 @@
   <main class="shell">
     <header class="top"><div class="brand"><span class="mark">✚</span>VetCare Manager</div><span class="tag">Gestión de pacientes</span></header>
     <section class="intro"><div class="eyebrow">Administración de clínica</div><h1>Clientes y mascotas</h1><p>Organiza los datos de propietarios y el registro de sus pacientes.</p></section>
-    <nav class="tabs" aria-label="Secciones"><button class="tab active" data-tab="propietarios">Propietarios</button><button class="tab" data-tab="mascotas">Mascotas</button></nav>
+    <nav class="tabs" aria-label="Secciones">
+      <button class="tab active" data-tab="propietarios">Propietarios</button>
+      <button class="tab" data-tab="mascotas">Mascotas</button>
+      <a class="tab" href="consultas.html">Consultas médicas</a>
+      <a class="tab" href="historial.html">Historial clínico</a>
+      <a class="tab" href="reportes.html">Reportes</a>
+    </nav>
     <section id="propietarios" class="layout">
       <form id="owner-form" class="panel"><h2 id="owner-title">Nuevo propietario</h2><input id="owner-id" type="hidden"><div class="fields">
         <div class="field"><label for="owner-first">Nombres *</label><input id="owner-first" required minlength="2" maxlength="80" autocomplete="given-name"></div>

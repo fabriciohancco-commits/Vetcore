@@ -2,12 +2,14 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Vetcare.Data;
 using Vetcare.Models;
+using Vetcare.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<VetCareDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("VetCare") ?? "Data Source=vetcare.db"));
+builder.Services.AddScoped<ReporteService>();
 
 var app = builder.Build();
 
@@ -113,6 +115,180 @@ api.MapDelete("/mascotas/{id:int}", async (int id, VetCareDbContext db) =>
     db.Mascotas.Remove(mascota);
     await db.SaveChangesAsync();
     return Results.NoContent();
+});
+
+// MODULO DE HISTORIAL CLINICO - JUAN MACHACA
+
+// Registrar una consulta médica
+api.MapPost("/consultas", async (
+    ConsultaMedica consulta,
+    VetCareDbContext db) =>
+{
+    var errors = Validate(consulta);
+
+    if (consulta.FechaConsulta > DateTime.Now)
+    {
+        AddError(
+            errors,
+            nameof(consulta.FechaConsulta),
+            "La fecha de consulta no puede ser futura.");
+    }
+
+    if (!await db.Mascotas.AnyAsync(
+        m => m.Id == consulta.MascotaId))
+    {
+        AddError(
+            errors,
+            nameof(consulta.MascotaId),
+            "La mascota seleccionada no existe.");
+    }
+
+    if (errors.Count > 0)
+        return Results.ValidationProblem(errors);
+
+    db.ConsultasMedicas.Add(consulta);
+
+    await db.SaveChangesAsync();
+
+    return Results.Created(
+        $"/api/consultas/{consulta.Id}",
+        consulta);
+});
+
+// Consultar todas las fichas médicas
+api.MapGet("/consultas", async (VetCareDbContext db) =>
+{
+    var consultas = await db.ConsultasMedicas
+        .AsNoTracking()
+        .Include(c => c.Mascota)
+        .OrderByDescending(c => c.FechaConsulta)
+        .ToListAsync();
+
+    return Results.Ok(consultas);
+});
+
+// Consultar una ficha médica por ID
+api.MapGet("/consultas/{id:int}", async (
+    int id,
+    VetCareDbContext db) =>
+{
+    var consulta = await db.ConsultasMedicas
+        .AsNoTracking()
+        .Include(c => c.Mascota)
+        .FirstOrDefaultAsync(c => c.Id == id);
+
+    return consulta is null
+        ? Results.NotFound()
+        : Results.Ok(consulta);
+});
+
+// Consultar historial clínico de una mascota
+api.MapGet("/mascotas/{mascotaId:int}/historial", async (
+    int mascotaId,
+    VetCareDbContext db) =>
+{
+    var existe = await db.Mascotas
+        .AnyAsync(m => m.Id == mascotaId);
+
+    if (!existe)
+        return Results.NotFound(
+            new { message = "Mascota no encontrada." });
+
+    var historial = await db.ConsultasMedicas
+        .AsNoTracking()
+        .Where(c => c.MascotaId == mascotaId)
+        .OrderByDescending(c => c.FechaConsulta)
+        .ToListAsync();
+
+    return Results.Ok(historial);
+});
+
+api.MapPut("/consultas/{id:int}", async (
+    int id,
+    ConsultaMedica input,
+    VetCareDbContext db) =>
+{
+    var actual = await db.ConsultasMedicas.FindAsync(id);
+
+    if (actual is null)
+        return Results.NotFound();
+
+    var errors = Validate(input);
+
+    if (input.FechaConsulta > DateTime.Now)
+    {
+        AddError(
+            errors,
+            nameof(input.FechaConsulta),
+            "La fecha de consulta no puede ser futura.");
+    }
+
+    if (!await db.Mascotas.AnyAsync(
+            m => m.Id == input.MascotaId))
+    {
+        AddError(
+            errors,
+            nameof(input.MascotaId),
+            "La mascota seleccionada no existe.");
+    }
+
+    if (errors.Count > 0)
+        return Results.ValidationProblem(errors);
+
+    actual.MascotaId = input.MascotaId;
+    actual.FechaConsulta = input.FechaConsulta;
+    actual.VeterinarioNombre = input.VeterinarioNombre;
+    actual.Motivo = input.Motivo;
+    actual.Diagnostico = input.Diagnostico;
+    actual.Tratamiento = input.Tratamiento;
+    actual.VacunasAplicadas = input.VacunasAplicadas;
+
+    await db.SaveChangesAsync();
+
+    return Results.Ok(actual);
+});
+
+// Eliminar una ficha médica
+api.MapDelete("/consultas/{id:int}", async (
+    int id,
+    VetCareDbContext db) =>
+{
+    var consulta = await db.ConsultasMedicas.FindAsync(id);
+
+    if (consulta is null)
+        return Results.NotFound();
+
+    db.ConsultasMedicas.Remove(consulta);
+
+    await db.SaveChangesAsync();
+
+    return Results.NoContent();
+});
+
+// MODÚLO DE REPORTES - JUAN MACHACA
+
+api.MapGet("/reportes/atenciones", async (
+    DateTime? desde,
+    DateTime? hasta,
+    string? veterinario,
+    ReporteService reporteService) =>
+{
+    if (desde.HasValue &&
+        hasta.HasValue &&
+        desde.Value.Date > hasta.Value.Date)
+    {
+        return Results.BadRequest(new
+        {
+            message = "La fecha inicial no puede ser posterior a la fecha final."
+        });
+    }
+
+    var reporte = await reporteService.ObtenerReporteAsync(
+        desde,
+        hasta,
+        veterinario);
+
+    return Results.Ok(reporte);
 });
 
 app.Run();
