@@ -15,7 +15,7 @@ Desde la carpeta raíz del repositorio:
 dotnet run --project Vetcare/Vetcare.csproj --launch-profile VetCare
 ```
 
-Abre [http://localhost:5002](http://localhost:5002) para usar la interfaz. La base de datos SQLite se crea automáticamente al iniciar la aplicación.
+Abre [http://localhost:5002](http://localhost:5002) para usar la interfaz. SQLite ya está configurada para la persistencia de la aplicación.
 
 ## Ejecutar desde Rider
 
@@ -32,17 +32,19 @@ Abre `Vetcare.sln`, selecciona el perfil **VetCare** y pulsa **Run**. El perfil 
 ## Organización
 
 ```text
-Vetcare/
+Vetcore/
 ├── Vetcare.sln
 ├── global.json
 ├── README.md
-└── Vetcare/
-    ├── Data/                 # Contexto de Entity Framework
-    ├── Models/               # Propietario y mascota
+└── Vetcare/                  # Una sola aplicación y un único dominio Vetcare
+    ├── API/                  # Endpoints REST
+    ├── Application/          # Comandos, consultas y handlers CQRS con MediatR
+    ├── Domain/Entities/      # Propietario, mascota y consulta médica
+    ├── Infrastructure/      # Contexto y persistencia EF Core/SQLite
     ├── Properties/           # Perfiles de ejecución
     ├── wwwroot/              # Interfaz web
-    ├── Program.cs            # Configuración y endpoints de la API
+    ├── Program.cs            # Configuración e inyección de dependencias
     └── Vetcare.csproj
 ```
 
-La base de datos SQLite, los archivos de compilación y las preferencias locales de Rider están excluidos de Git.
+La configuración de SQLite se conserva, junto con la exclusión de archivos de compilación y preferencias locales de Rider.
