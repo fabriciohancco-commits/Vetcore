@@ -37,7 +37,7 @@ Vetcore/
 ├── global.json
 ├── README.md
 └── Vetcare/                  # Una sola aplicación y un único dominio Vetcare
-    ├── API/                  # Endpoints REST
+    ├── API/                  # Controladores REST y DTOs
     ├── Application/          # Comandos, consultas y handlers CQRS con MediatR
     ├── Domain/Entities/      # Propietario, mascota y consulta médica
     ├── Infrastructure/      # Contexto y persistencia EF Core/SQLite

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Vetcare.API;
 using Vetcare.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<VetCareDbContext>(options =>
@@ -28,5 +28,5 @@ using (var scope = app.Services.CreateScope())
     db.Database.EnsureCreated();
 }
 
-ApiEndpoints.Map(app);
+app.MapControllers();
 app.Run();
