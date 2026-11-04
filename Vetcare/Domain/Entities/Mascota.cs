@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Vetcare.Models;
+namespace Vetcare.Domain.Entities;
 
 public sealed class Mascota
 {

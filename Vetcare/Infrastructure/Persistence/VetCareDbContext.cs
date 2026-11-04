@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Vetcare.Models;
+using Vetcare.Domain.Entities;
 
-namespace Vetcare.Data;
+namespace Vetcare.Infrastructure.Persistence;
 
 public sealed class VetCareDbContext(
     DbContextOptions<VetCareDbContext> options) : DbContext(options)
