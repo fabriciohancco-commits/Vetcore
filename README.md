@@ -1,6 +1,6 @@
 # VetCare Manager
 
-Proyecto final del curso de Desarrollo de Aplicaciones Empresariales Avanzado. VetCare Manager permite administrar propietarios y mascotas de una clínica veterinaria.
+Proyecto final del curso de Desarrollo de Aplicaciones Empresariales Avanzado. VetCare Manager permite administrar propietarios, mascotas, consultas clínicas e inventario de una clínica veterinaria.
 
 ## Requisitos
 
@@ -28,6 +28,9 @@ Abre `Vetcare.sln`, selecciona el perfil **VetCare** y pulsa **Run**. El perfil 
 - Asociar cada mascota con su propietario.
 - Validar campos, correo, teléfono, peso y fechas.
 - Evitar eliminar propietarios que todavía tienen mascotas asociadas.
+- Registrar consultas, consultar historiales clínicos y generar reportes de atenciones.
+- Administrar medicinas e insumos, controlar stock mínimo y registrar entradas y salidas.
+- Consultar productos con stock bajo y conservar el historial de movimientos.
 
 ## Organización
 
@@ -37,14 +40,16 @@ Vetcore/
 ├── global.json
 ├── README.md
 └── Vetcare/                  # Una sola aplicación y un único dominio Vetcare
-    ├── API/                  # Controladores REST y DTOs
-    ├── Application/          # Comandos, consultas y handlers CQRS con MediatR
-    ├── Domain/Entities/      # Propietario, mascota y consulta médica
-    ├── Infrastructure/      # Contexto y persistencia EF Core/SQLite
+    ├── API/                  # Controladores REST y DTOs de entrada/salida
+    ├── Application/          # Casos de uso CQRS, validación y contratos de persistencia
+    ├── Domain/Entities/      # Propietario, mascota, consulta y entidades de inventario
+    ├── Infrastructure/      # Repositorios, Unit of Work y persistencia EF Core/SQLite
     ├── Properties/           # Perfiles de ejecución
     ├── wwwroot/              # Interfaz web
     ├── Program.cs            # Configuración e inyección de dependencias
     └── Vetcare.csproj
 ```
+
+La estructura sigue las cuatro capas de la referencia: API, Application, Domain e Infrastructure. Los módulos de propietarios, mascotas e inventario usan interfaces de repositorio definidas en Application e implementadas en Infrastructure. Unit of Work centraliza el guardado y las transacciones de inventario. Los controladores traducen DTOs y delegan los casos de uso mediante MediatR. Consultas, historial y reportes mantienen sus handlers CQRS existentes.
 
 La configuración de SQLite se conserva, junto con la exclusión de archivos de compilación y preferencias locales de Rider.
