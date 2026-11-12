@@ -26,7 +26,7 @@ app.UseStaticFiles();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<VetCareDbContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 }
 
 var api = app.MapGroup("/api");
@@ -260,6 +260,92 @@ api.MapDelete("/consultas/{id:int}", async (
 
     db.ConsultasMedicas.Remove(consulta);
 
+    await db.SaveChangesAsync();
+
+    return Results.NoContent();
+});
+
+// LISTAR MEDICAMENTOS
+app.MapGet("/api/medicamentos", async (VetCareDbContext db) =>
+{
+    var medicamentos = await db.Medicamentos
+        .OrderBy(m => m.Nombre)
+        .ToListAsync();
+
+    return Results.Ok(medicamentos);
+});
+
+// BUSCAR MEDICAMENTO POR ID
+app.MapGet("/api/medicamentos/{id:int}", async (int id, VetCareDbContext db) =>
+{
+    var medicamento = await db.Medicamentos.FindAsync(id);
+
+    return medicamento is null
+        ? Results.NotFound(new { message = "Medicamento no encontrado." })
+        : Results.Ok(medicamento);
+});
+
+// REGISTRAR MEDICAMENTO
+app.MapPost("/api/medicamentos", async (Medicamento medicamento, VetCareDbContext db) =>
+{
+    if (string.IsNullOrWhiteSpace(medicamento.Nombre) ||
+        string.IsNullOrWhiteSpace(medicamento.Presentacion) ||
+        string.IsNullOrWhiteSpace(medicamento.UnidadMedida))
+    {
+        return Results.BadRequest(new { message = "Completa los campos obligatorios." });
+    }
+
+    if (medicamento.Stock < 0 || medicamento.Precio < 0)
+        return Results.BadRequest(new { message = "El stock y el precio no pueden ser negativos." });
+
+    medicamento.Id = 0;
+    db.Medicamentos.Add(medicamento);
+    await db.SaveChangesAsync();
+
+    return Results.Created($"/api/medicamentos/{medicamento.Id}", medicamento);
+});
+
+// EDITAR MEDICAMENTO
+app.MapPut("/api/medicamentos/{id:int}", async (
+    int id, Medicamento datos, VetCareDbContext db) =>
+{
+    var medicamento = await db.Medicamentos.FindAsync(id);
+
+    if (medicamento is null)
+        return Results.NotFound(new { message = "Medicamento no encontrado." });
+
+    if (string.IsNullOrWhiteSpace(datos.Nombre) ||
+        string.IsNullOrWhiteSpace(datos.Presentacion) ||
+        string.IsNullOrWhiteSpace(datos.UnidadMedida))
+    {
+        return Results.BadRequest(new { message = "Completa los campos obligatorios." });
+    }
+
+    if (datos.Stock < 0 || datos.Precio < 0)
+        return Results.BadRequest(new { message = "El stock y el precio no pueden ser negativos." });
+
+    medicamento.Nombre = datos.Nombre.Trim();
+    medicamento.Descripcion = datos.Descripcion;
+    medicamento.Presentacion = datos.Presentacion.Trim();
+    medicamento.Stock = datos.Stock;
+    medicamento.UnidadMedida = datos.UnidadMedida.Trim();
+    medicamento.FechaVencimiento = datos.FechaVencimiento;
+    medicamento.Precio = datos.Precio;
+
+    await db.SaveChangesAsync();
+
+    return Results.Ok(medicamento);
+});
+
+// ELIMINAR MEDICAMENTO
+app.MapDelete("/api/medicamentos/{id:int}", async (int id, VetCareDbContext db) =>
+{
+    var medicamento = await db.Medicamentos.FindAsync(id);
+
+    if (medicamento is null)
+        return Results.NotFound(new { message = "Medicamento no encontrado." });
+
+    db.Medicamentos.Remove(medicamento);
     await db.SaveChangesAsync();
 
     return Results.NoContent();

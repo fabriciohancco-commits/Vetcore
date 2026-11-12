@@ -12,6 +12,8 @@ public sealed class VetCareDbContext(
 
     public DbSet<ConsultaMedica> ConsultasMedicas =>
         Set<ConsultaMedica>();
+    
+    public DbSet<Medicamento> Medicamentos => Set<Medicamento>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

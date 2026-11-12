@@ -1,0 +1,268 @@
+﻿
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Medicamentos - VetCare</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f8;
+            margin: 0;
+            padding: 24px;
+            color: #24343b;
+        }
+        main { max-width: 900px; margin: auto; }
+        .panel {
+            background: white;
+            padding: 22px;
+            margin: 18px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px #00000012;
+        }
+        .fields {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+        label { display: block; margin-bottom: 6px; }
+        input, textarea, select {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccd5d9;
+            border-radius: 7px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 12px 6px 0 0;
+            border: 0;
+            border-radius: 7px;
+            background: #167d78;
+            color: white;
+            cursor: pointer;
+        }
+        button.danger { background: #b83d3d; }
+        .medicina {
+            border-bottom: 1px solid #e2e8eb;
+            padding: 14px 0;
+        }
+        .mensaje { margin-top: 12px; }
+        a { color: #167d78; }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Inventario de medicamentos</h1>
+    <p><a href="index.html">← Volver al menú principal</a></p>
+
+    <section class="panel">
+        <h2 id="form-title">Registrar medicamento</h2>
+
+        <form id="med-form">
+            <input type="hidden" id="med-id">
+
+            <div class="fields">
+                <div>
+                    <label for="nombre">Nombre *</label>
+                    <input id="nombre" maxlength="100" required>
+                </div>
+
+                <div>
+                    <label for="presentacion">Presentación *</label>
+                    <select id="presentacion" required>
+                        <option value="">Seleccionar</option>
+                        <option>Tableta</option>
+                        <option>Jarabe</option>
+                        <option>Inyectable</option>
+                        <option>Crema</option>
+                        <option>Gotas</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="stock">Stock *</label>
+                    <input id="stock" type="number" min="0" required>
+                </div>
+
+                <div>
+                    <label for="unidad">Unidad de medida *</label>
+                    <input id="unidad" maxlength="20"
+                           placeholder="Ej. unidades, frascos" required>
+                </div>
+
+                <div>
+                    <label for="vencimiento">Fecha de vencimiento</label>
+                    <input id="vencimiento" type="date">
+                </div>
+
+                <div>
+                    <label for="precio">Precio</label>
+                    <input id="precio" type="number" min="0"
+                           step="0.01" value="0">
+                </div>
+
+                <div style="grid-column:1/-1">
+                    <label for="descripcion">Descripción</label>
+                    <textarea id="descripcion" maxlength="300"></textarea>
+                </div>
+            </div>
+
+            <button type="submit">Guardar medicamento</button>
+            <button type="button" id="cancelar" hidden>Cancelar edición</button>
+            <div id="mensaje" class="mensaje" role="status"></div>
+        </form>
+    </section>
+
+    <section class="panel">
+        <h2>Medicamentos registrados</h2>
+        <div id="lista">Cargando...</div>
+    </section>
+</main>
+
+<script>
+    const byId = id => document.getElementById(id);
+
+    async function api(url, options = {}) {
+        const response = await fetch('/api/medicamentos' + url, {
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options.headers || {})
+            }
+        });
+
+        if (!response.ok) {
+            let error = 'No se pudo completar la operación.';
+            try {
+                const data = await response.json();
+                error = data.message || error;
+            } catch {}
+            throw new Error(error);
+        }
+
+        return response.status === 204 ? null : response.json();
+    }
+
+    function escapar(valor) {
+        return String(valor ?? '').replace(/[&<>"']/g, c => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;',
+            '"': '&quot;', "'": '&#39;'
+        })[c]);
+    }
+
+    function mostrarMensaje(texto, error = false) {
+        byId('mensaje').textContent = texto;
+        byId('mensaje').style.color = error ? '#b83d3d' : '#167d78';
+    }
+
+    function limpiarFormulario() {
+        byId('med-form').reset();
+        byId('med-id').value = '';
+        byId('form-title').textContent = 'Registrar medicamento';
+        byId('cancelar').hidden = true;
+    }
+
+    async function cargarMedicamentos() {
+        try {
+            const medicamentos = await api('');
+
+            byId('lista').innerHTML = medicamentos.length
+                ? medicamentos.map(m => `
+        <article class="medicina">
+          <h3>${escapar(m.nombre)}</h3>
+          <p>
+            Presentación: ${escapar(m.presentacion)}<br>
+            Stock: ${escapar(m.stock)} ${escapar(m.unidadMedida)}<br>
+            Vencimiento: ${m.fechaVencimiento
+                    ? escapar(m.fechaVencimiento.substring(0, 10))
+                    : 'No especificado'}<br>
+            Precio: ${escapar(m.precio)}
+          </p>
+          <p>${escapar(m.descripcion || '')}</p>
+          <button type="button" data-editar="${m.id}">Editar</button>
+          <button type="button" class="danger"
+                  data-eliminar="${m.id}">Eliminar</button>
+        </article>
+      `).join('')
+                : '<p>Aún no hay medicamentos registrados.</p>';
+
+            byId('lista').querySelectorAll('[data-editar]').forEach(b => {
+                b.addEventListener('click', () => editar(Number(b.dataset.editar), medicamentos));
+            });
+
+            byId('lista').querySelectorAll('[data-eliminar]').forEach(b => {
+                b.addEventListener('click', () => eliminar(Number(b.dataset.eliminar)));
+            });
+        } catch (error) {
+            byId('lista').textContent = error.message;
+        }
+    }
+
+    function editar(id, medicamentos) {
+        const m = medicamentos.find(x => x.id === id);
+        if (!m) return;
+
+        byId('med-id').value = m.id;
+        byId('nombre').value = m.nombre;
+        byId('presentacion').value = m.presentacion;
+        byId('stock').value = m.stock;
+        byId('unidad').value = m.unidadMedida;
+        byId('vencimiento').value = m.fechaVencimiento
+            ? m.fechaVencimiento.substring(0, 10) : '';
+        byId('precio').value = m.precio;
+        byId('descripcion').value = m.descripcion || '';
+
+        byId('form-title').textContent = 'Editar medicamento';
+        byId('cancelar').hidden = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function eliminar(id) {
+        if (!confirm('¿Deseas eliminar este medicamento?')) return;
+
+        try {
+            await api('/' + id, { method: 'DELETE' });
+            mostrarMensaje('Medicamento eliminado.');
+            await cargarMedicamentos();
+        } catch (error) {
+            mostrarMensaje(error.message, true);
+        }
+    }
+
+    byId('med-form').addEventListener('submit', async event => {
+        event.preventDefault();
+
+        const id = byId('med-id').value;
+        const body = {
+            nombre: byId('nombre').value.trim(),
+            presentacion: byId('presentacion').value,
+            stock: Number(byId('stock').value),
+            unidadMedida: byId('unidad').value.trim(),
+            fechaVencimiento: byId('vencimiento').value || null,
+            precio: Number(byId('precio').value || 0),
+            descripcion: byId('descripcion').value.trim() || null
+        };
+
+        try {
+            await api(id ? '/' + id : '', {
+                method: id ? 'PUT' : 'POST',
+                body: JSON.stringify(body)
+            });
+
+            limpiarFormulario();
+            mostrarMensaje('Medicamento guardado correctamente.');
+            await cargarMedicamentos();
+        } catch (error) {
+            mostrarMensaje(error.message, true);
+        }
+    });
+
+    byId('cancelar').addEventListener('click', limpiarFormulario);
+
+    cargarMedicamentos();
+</script>
+</body>
+</html>
