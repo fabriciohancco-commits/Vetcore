@@ -48,11 +48,13 @@
     </section>
     <footer class="foot">VetCare Manager · Clientes y mascotas</footer>
   </main>
-<script>
+<script type="module">
+import { apiRequest, escapeHtml, setStatus } from "./js/api.js";
+
 const $=id=>document.getElementById(id);let owners=[],pets=[];
-const api=async(path,options={})=>{const response=await fetch('/api/'+path,{...options,headers:{'Content-Type':'application/json',...(options.headers||{})}});if(!response.ok){let msg='No se pudo completar la operación.';try{const data=await response.json();msg=data.message||Object.values(data.errors||{}).flat().join(' ' )||msg}catch{}throw new Error(msg)}return response.status===204?null:response.json()};
-const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function notice(id,message,error=false){$(id).textContent=message;$(id).classList.toggle('error',error)}
+const api=apiRequest;
+const esc=escapeHtml;
+function notice(id,message,error=false){setStatus($(id),message,error)}
 function resetOwner(){$('owner-form').reset();$('owner-id').value='';$('owner-title').textContent='Nuevo propietario';$('owner-cancel').classList.add('hidden')}
 function resetPet(){$('pet-form').reset();$('pet-id').value='';$('pet-title').textContent='Registrar mascota';$('pet-cancel').classList.add('hidden')}
 function ownerName(id){const p=owners.find(x=>x.id===id);return p?`${p.nombres} ${p.apellidos}`:'Propietario no disponible'}
