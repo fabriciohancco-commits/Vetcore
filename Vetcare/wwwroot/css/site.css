@@ -388,6 +388,14 @@ textarea {
 .button:hover,.btn:hover {
   filter:brightness(.96)
 }
+.button:focus-visible,.btn:focus-visible,.small:focus-visible,.tab:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible {
+  outline:3px solid #4cae8d;
+  outline-offset:3px
+}
+.button:disabled,.btn:disabled {
+  cursor:wait;
+  opacity:.68
+}
 .list-head {
   display:flex;
   align-items:center;
@@ -549,6 +557,14 @@ textarea {
   .summary {
   grid-template-columns:1fr 1fr;
   gap:8px
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    scroll-behavior:auto!important;
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important
+  }
 }
 .metric {
   padding:12px 11px;
