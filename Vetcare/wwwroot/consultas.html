@@ -13,12 +13,4 @@
   <div class="section-heading"><div><h2>Atenciones registradas</h2><p>Consulta el motivo, diagnóstico y tratamiento de cada visita.</p></div><button class="button" id="reload" type="button">Actualizar listado</button></div>
   <div id="msg" class="notice" role="status" aria-live="polite"></div><div id="list" class="record-list"></div>
 </section>
-<script>
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-async function load(){const msg=document.getElementById("msg"),list=document.getElementById("list");msg.textContent="Cargando atenciones...";msg.className="notice";try{
- const response=await fetch("/api/consultas");if(!response.ok)throw Error("HTTP "+response.status);const rows=await response.json();
- msg.textContent=rows.length+" "+(rows.length===1?"atención encontrada.":"atenciones encontradas.");
- list.innerHTML=rows.length?rows.map(c=>`<article class="record-card"><div class="record-header"><div><span class="record-label">${esc(c.veterinarioNombre)}</span><h3>${esc(c.mascota?.nombre||("Mascota #"+c.mascotaId))}</h3></div><time class="record-date">${new Date(c.fechaConsulta).toLocaleString("es-PE")}</time></div><dl class="record-details"><div><dt>Motivo</dt><dd>${esc(c.motivo)}</dd></div><div><dt>Diagnóstico</dt><dd>${esc(c.diagnostico)}</dd></div>${c.tratamiento?`<div><dt>Tratamiento</dt><dd>${esc(c.tratamiento)}</dd></div>`:""}${c.vacunasAplicadas?`<div><dt>Vacunas</dt><dd>${esc(c.vacunasAplicadas)}</dd></div>`:""}</dl></article>`).join(""):'<div class="empty">Todavía no hay consultas registradas.</div>';
- }catch(e){msg.textContent="No se pudo cargar: "+e.message;msg.className="notice error";}}
-document.getElementById("reload").onclick=load;load();
-</script></main></body></html>
+<script type="module" src="js/consultas.js"></script></main></body></html>
