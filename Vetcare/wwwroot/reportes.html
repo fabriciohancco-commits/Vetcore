@@ -19,13 +19,4 @@
   </div>
   <div id="msg" class="notice" role="status" aria-live="polite"></div><div id="summary" class="report-summary" aria-live="polite"></div><div id="list" class="record-list"></div>
 </section>
-<script>
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-async function load(){const from=document.getElementById("desde").value,to=document.getElementById("hasta").value,veterinarian=document.getElementById("vet").value.trim(),msg=document.getElementById("msg"),summary=document.getElementById("summary"),list=document.getElementById("list");if(from&&to&&from>to){msg.textContent="La fecha inicial no puede ser posterior a la fecha final.";msg.className="notice error";return;}
-const query=new URLSearchParams();if(from)query.set("desde",from);if(to)query.set("hasta",to);if(veterinarian)query.set("veterinario",veterinarian);msg.textContent="Generando reporte...";msg.className="notice";
-try{const response=await fetch("/api/reportes/atenciones?"+query);if(!response.ok)throw Error("HTTP "+response.status);const rows=await response.json(),total=rows.reduce((count,row)=>count+row.totalAtenciones,0);
-msg.textContent="Reporte generado correctamente.";summary.innerHTML=`<div class="report-total"><span>Total de atenciones</span><strong>${total}</strong></div>`;
-list.innerHTML=rows.length?rows.map(row=>`<article class="record-card report-row"><div class="record-header"><h3>${esc(row.veterinario)}</h3><span class="record-date">${Number(row.totalAtenciones)} ${row.totalAtenciones===1?"atención":"atenciones"}</span></div></article>`).join(""):'<div class="empty">No hay resultados para esos filtros.</div>';
-}catch(e){msg.textContent="No se pudo generar el reporte: "+e.message;msg.className="notice error";}}
-document.getElementById("run").onclick=load;
-</script></main></body></html>
+<script type="module" src="js/reportes.js"></script></main></body></html>
