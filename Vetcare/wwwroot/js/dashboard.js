@@ -206,8 +206,14 @@ $("owner-form").addEventListener("submit", saveOwner);
 $("pet-form").addEventListener("submit", savePet);
 $("owner-cancel").addEventListener("click", resetOwnerForm);
 $("pet-cancel").addEventListener("click", resetPetForm);
-$("owner-search").addEventListener("click", refreshDashboard);
-$("pet-search").addEventListener("click", refreshDashboard);
+$("owner-search-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  refreshDashboard();
+});
+$("pet-search-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  refreshDashboard();
+});
 
 $("owner-list").addEventListener("click", (event) => {
   const editButton = event.target.closest("[data-edit-owner]");
