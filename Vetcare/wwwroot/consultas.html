@@ -2,21 +2,11 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VetCare Manager</title>
-<style>
-:root{font-family:Inter,"Segoe UI",sans-serif;color:#182522;background:#f5f7f4}
-*{box-sizing:border-box}body{margin:0}.shell{max-width:1000px;margin:auto;padding:32px 22px}
-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:28px}
-a{color:#176b55}.brand{font-weight:750;color:#182522;text-decoration:none}.nav{display:flex;gap:8px;flex-wrap:wrap}
-.nav a,.btn{padding:9px 12px;border-radius:9px;background:#176b55;color:#fff;text-decoration:none;border:0;cursor:pointer;font:inherit}
-.panel{background:#fff;border:1px solid #e5ebe7;border-radius:14px;padding:20px;margin:14px 0}
-h1{margin:8px 0}p,.muted{color:#65736f}input,select{padding:10px;border:1px solid #d9e1dc;border-radius:8px;font:inherit}
-label{display:block;font-size:13px;margin:10px 0 5px}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}
-.card{padding:13px;border:1px solid #e5ebe7;border-radius:10px;margin:9px 0;line-height:1.55}
-.notice{font-size:13px;color:#176b55}.error{color:#b33f32}.empty{padding:22px;text-align:center;color:#65736f}
-</style></head><body><main class="shell">
-<header><a class="brand" href="index.html">✚ VetCare Manager</a><nav class="nav">
-<a href="index.html">Inicio</a><a href="consultas.html">Consultas</a><a href="historial.html">Historial</a><a href="reportes.html">Reportes</a>
+<title>Consultas médicas | VetCare Manager</title>
+<link rel="stylesheet" href="css/site.css">
+</head><body><main class="shell">
+<header class="top site-header"><a class="brand" href="index.html"><span class="mark">✚</span><span>VetCare Manager</span></a><nav class="tabs site-nav" aria-label="Secciones">
+<a class="tab" href="index.html">Propietarios y mascotas</a><a class="tab active" href="consultas.html" aria-current="page">Consultas médicas</a><a class="tab" href="historial.html">Historial clínico</a><a class="tab" href="reportes.html">Reportes</a>
 </nav></header>
 <h1>Consultas médicas</h1><p>Fichas médicas registradas en el sistema.</p>
 <section class="panel"><button class="btn" id="reload">Actualizar listado</button><div id="msg" class="notice"></div><div id="list"></div></section>

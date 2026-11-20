@@ -28,7 +28,18 @@ body {
   align-items:center;
   gap:12px;
   font-weight:750;
-  font-size:19px
+  font-size:19px;
+  color:#182522;
+  text-decoration:none
+}
+.site-header {
+  align-items:flex-start;
+  gap:20px
+}
+.site-nav {
+  justify-content:flex-end;
+  margin:0;
+  max-width:900px
 }
 .mark {
   display:grid;
@@ -217,7 +228,7 @@ textarea {
   gap:9px;
   margin-top:17px
 }
-.button {
+.button,.btn {
   border:0;
   border-radius:9px;
   background:linear-gradient(135deg,#198467,#176b55);
@@ -232,7 +243,7 @@ textarea {
   color:#33433d;
   box-shadow:none
 }
-.button:hover {
+.button:hover,.btn:hover {
   filter:brightness(.96)
 }
 .list-head {
@@ -321,9 +332,38 @@ textarea {
   font-size:12px;
   padding-top:24px
 }
+.row {
+  display:flex;
+  align-items:flex-end;
+  gap:12px;
+  flex-wrap:wrap
+}
+.row > div {
+  min-width:180px
+}
+.notice {
+  min-height:22px;
+  margin-top:14px;
+  color:#176b55;
+  font-size:13px
+}
+.notice.error,.error {
+  color:#b33f32
+}
+.muted {
+  color:#718078
+}
 @media(max-width:760px) {
   .shell {
   padding:22px 15px 45px
+}
+.site-header {
+  flex-direction:column;
+  align-items:stretch;
+  margin-bottom:26px
+}
+.site-nav {
+  justify-content:flex-start
 }
 .layout {
   grid-template-columns:1fr
