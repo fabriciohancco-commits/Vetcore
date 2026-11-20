@@ -33,20 +33,24 @@ Abre `Vetcare.sln`, selecciona el perfil **VetCare** y pulsa **Run**. El perfil 
 
 ## Organización
 
+VetCare sigue una organización por capas dentro de una aplicación ASP.NET Core. La estructura completa, las responsabilidades de cada carpeta y el flujo de una petición están descritos en [docs/arquitectura.md](docs/arquitectura.md).
+
 ```text
 Vetcore/
 ├── Vetcare.sln
 ├── global.json
 ├── README.md
 └── Vetcare/                  # Una sola aplicación y un único dominio Vetcare
-    ├── API/                  # Controladores REST y DTOs
-    ├── Application/          # Comandos, consultas y handlers CQRS con MediatR
+    ├── API/                  # Controladores REST, DTOs y mapeos
+    ├── Application/          # Casos de uso CQRS con MediatR
     ├── Domain/Entities/      # Propietario, mascota y consulta médica
-    ├── Infrastructure/      # Contexto y persistencia EF Core/SQLite
+    ├── Infrastructure/       # Contexto de datos EF Core/SQLite
     ├── Properties/           # Perfiles de ejecución
-    ├── wwwroot/              # Interfaz web
-    ├── Program.cs            # Configuración e inyección de dependencias
-    └── Vetcare.csproj
+    ├── wwwroot/              # Interfaz web y recursos estáticos
+    ├── Program.cs            # Composición e inicio de la aplicación
+    └── Vetcare.csproj        # Proyecto web .NET 8
 ```
 
-La configuración de SQLite se conserva, junto con la exclusión de archivos de compilación y preferencias locales de Rider.
+Las carpetas representan responsabilidades distintas, pero actualmente compilan en un solo proyecto .NET. El informe de referencia muestra esas capas como proyectos separados y describe una mesa de ayuda con otras tecnologías; VetCare conserva su propio dominio veterinario, SQLite y funciones. La guía de arquitectura explica también esta diferencia y cómo leerla.
+
+La base de datos SQLite se crea al iniciar la aplicación. Los archivos de compilación y las preferencias locales de Rider se excluyen de Git.
