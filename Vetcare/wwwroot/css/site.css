@@ -223,6 +223,38 @@ body {
   flex-direction:column;
   gap:6px
 }
+.report-filters {
+  grid-template-columns:repeat(3,minmax(0,1fr)) auto;
+  margin-top:18px
+}
+.report-summary {
+  margin-top:18px
+}
+.report-total {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:18px 20px;
+  border:1px solid #d8e9df;
+  border-radius:15px;
+  background:linear-gradient(110deg,#e9f5ed,#f8fcf9);
+  color:#52645a
+}
+.report-total strong {
+  color:#176b55;
+  font-size:30px;
+  letter-spacing:-.04em
+}
+.report-row {
+  padding:14px 18px
+}
+.report-row .record-header {
+  align-items:center
+}
+.report-row h3 {
+  margin:0
+}
 .record-list {
   display:grid;
   gap:12px;
@@ -480,7 +512,7 @@ textarea {
 
 }
 @media(max-width:520px) {
-  .filter-bar,.record-details {
+  .filter-bar,.record-details,.report-filters {
     grid-template-columns:1fr
   }
   .filter-bar .button {

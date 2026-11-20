@@ -8,20 +8,24 @@
 <header class="top site-header"><a class="brand" href="index.html"><span class="mark">✚</span><span>VetCare Manager</span></a><nav class="tabs site-nav" aria-label="Secciones">
 <a class="tab" href="index.html">Propietarios y mascotas</a><a class="tab" href="consultas.html">Consultas médicas</a><a class="tab" href="historial.html">Historial clínico</a><a class="tab active" href="reportes.html" aria-current="page">Reportes</a>
 </nav></header>
-<h1>Reportes de atenciones</h1><p>Filtra las atenciones por rango de fechas y veterinario.</p>
-<section class="panel"><div class="row">
-<div><label for="desde">Desde</label><input id="desde" type="date"></div>
-<div><label for="hasta">Hasta</label><input id="hasta" type="date"></div>
-<div><label for="vet">Veterinario</label><input id="vet" placeholder="Opcional"></div>
-<button class="btn" id="run">Generar reporte</button></div>
-<div id="msg" class="notice"></div><div id="summary"></div><div id="list"></div></section>
+<section class="page-intro"><div class="eyebrow">Resumen de actividad</div><h1>Reportes de atenciones</h1><p>Explora la actividad clínica por fechas y veterinario.</p></section>
+<section class="panel">
+  <div class="section-heading"><div><h2>Filtrar atenciones</h2><p>Elige un rango de fechas y, si deseas, un veterinario.</p></div></div>
+  <div class="filter-bar report-filters">
+    <div class="field"><label for="desde">Desde</label><input id="desde" type="date"></div>
+    <div class="field"><label for="hasta">Hasta</label><input id="hasta" type="date"></div>
+    <div class="field"><label for="vet">Veterinario</label><input id="vet" placeholder="Todos los veterinarios"></div>
+    <button class="button" id="run" type="button">Generar reporte</button>
+  </div>
+  <div id="msg" class="notice" role="status" aria-live="polite"></div><div id="summary" class="report-summary" aria-live="polite"></div><div id="list" class="record-list"></div>
+</section>
 <script>
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-async function load(){const d=document.getElementById("desde").value,h=document.getElementById("hasta").value,v=document.getElementById("vet").value.trim(),msg=document.getElementById("msg");if(d&&h&&d>h){msg.textContent="La fecha inicial no puede ser posterior a la final.";return;}
-const q=new URLSearchParams();if(d)q.set("desde",d);if(h)q.set("hasta",h);if(v)q.set("veterinario",v);
-try{const r=await fetch("/api/reportes/atenciones?"+q);if(!r.ok)throw Error("HTTP "+r.status);const rows=await r.json(),total=rows.reduce((n,x)=>n+x.totalAtenciones,0);
-msg.textContent="Reporte generado: "+total+" atenciones.";document.getElementById("summary").innerHTML="<h2>Total de atenciones: "+total+"</h2>";
-document.getElementById("list").innerHTML=rows.length?rows.map(x=>`<article class="card"><strong>${esc(x.veterinario)}</strong><br>${Number(x.totalAtenciones)} atención(es)</article>`).join(""):'<div class="empty">No hay resultados para esos filtros.</div>';
+async function load(){const from=document.getElementById("desde").value,to=document.getElementById("hasta").value,veterinarian=document.getElementById("vet").value.trim(),msg=document.getElementById("msg"),summary=document.getElementById("summary"),list=document.getElementById("list");if(from&&to&&from>to){msg.textContent="La fecha inicial no puede ser posterior a la fecha final.";msg.className="notice error";return;}
+const query=new URLSearchParams();if(from)query.set("desde",from);if(to)query.set("hasta",to);if(veterinarian)query.set("veterinario",veterinarian);msg.textContent="Generando reporte...";msg.className="notice";
+try{const response=await fetch("/api/reportes/atenciones?"+query);if(!response.ok)throw Error("HTTP "+response.status);const rows=await response.json(),total=rows.reduce((count,row)=>count+row.totalAtenciones,0);
+msg.textContent="Reporte generado correctamente.";summary.innerHTML=`<div class="report-total"><span>Total de atenciones</span><strong>${total}</strong></div>`;
+list.innerHTML=rows.length?rows.map(row=>`<article class="record-card report-row"><div class="record-header"><h3>${esc(row.veterinario)}</h3><span class="record-date">${Number(row.totalAtenciones)} ${row.totalAtenciones===1?"atención":"atenciones"}</span></div></article>`).join(""):'<div class="empty">No hay resultados para esos filtros.</div>';
 }catch(e){msg.textContent="No se pudo generar el reporte: "+e.message;msg.className="notice error";}}
 document.getElementById("run").onclick=load;
 </script></main></body></html>

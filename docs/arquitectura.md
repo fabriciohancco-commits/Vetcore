@@ -19,9 +19,15 @@ Vetcore/
 │   ├── Propietarios/         # Casos de uso de propietarios
 │   └── Reportes/             # Consultas de reportes
     ├── Domain/Entities/      # Entidades del negocio veterinario
-    ├── Infrastructure/Persistence/
-│   └── VetCareDbContext.cs   # EF Core y relaciones SQLite
-    ├── wwwroot/              # Interfaz web estática
+    ├── Infrastructure/
+    │   └── Persistence/
+    │       └── VetCareDbContext.cs # EF Core y relaciones SQLite
+    ├── wwwroot/              # Interfaz web y recursos estáticos
+    │   ├── css/site.css      # Estilos compartidos de todas las páginas
+    │   ├── index.html        # Propietarios y mascotas
+    │   ├── consultas.html    # Consultas médicas
+    │   ├── historial.html   # Historial por mascota
+    │   └── reportes.html     # Resumen de atenciones
     ├── Program.cs            # Configuración y composición
     └── Vetcare.csproj
 ```
@@ -32,7 +38,7 @@ Vetcore/
 - **Application:** define solicitudes CQRS y sus handlers con MediatR para propietarios, mascotas, consultas e informes.
 - **Domain:** contiene las entidades `Propietario`, `Mascota` y `ConsultaMedica`.
 - **Infrastructure:** configura EF Core, las relaciones entre entidades y la base SQLite.
-- **wwwroot:** sirve las páginas web que consumen los endpoints `/api`.
+- **wwwroot:** sirve las páginas web que consumen los endpoints `/api`. Todas las vistas comparten `css/site.css` y un menú común para mantener la misma jerarquía visual.
 
 ## Recorrido de una solicitud
 

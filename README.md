@@ -51,6 +51,6 @@ Vetcore/
     └── Vetcare.csproj        # Proyecto web .NET 8
 ```
 
-Las carpetas representan responsabilidades distintas, pero actualmente compilan en un solo proyecto .NET. El informe de referencia muestra esas capas como proyectos separados y describe una mesa de ayuda con otras tecnologías; VetCare conserva su propio dominio veterinario, SQLite y funciones. La guía de arquitectura explica también esta diferencia y cómo leerla.
+Las carpetas representan responsabilidades distintas, pero actualmente compilan en un solo proyecto .NET. La interfaz comparte `Vetcare/wwwroot/css/site.css` y mantiene la navegación entre sus cuatro pantallas. El informe de referencia muestra esas capas como proyectos separados y describe una mesa de ayuda con otras tecnologías; VetCare conserva su propio dominio veterinario, SQLite y funciones. La guía de arquitectura explica también esta diferencia y cómo leerla.
 
 La base de datos SQLite se crea al iniciar la aplicación. Los archivos de compilación y las preferencias locales de Rider se excluyen de Git.
