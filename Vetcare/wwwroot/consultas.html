@@ -8,14 +8,17 @@
 <header class="top site-header"><a class="brand" href="index.html"><span class="mark">✚</span><span>VetCare Manager</span></a><nav class="tabs site-nav" aria-label="Secciones">
 <a class="tab" href="index.html">Propietarios y mascotas</a><a class="tab active" href="consultas.html" aria-current="page">Consultas médicas</a><a class="tab" href="historial.html">Historial clínico</a><a class="tab" href="reportes.html">Reportes</a>
 </nav></header>
-<h1>Consultas médicas</h1><p>Fichas médicas registradas en el sistema.</p>
-<section class="panel"><button class="btn" id="reload">Actualizar listado</button><div id="msg" class="notice"></div><div id="list"></div></section>
+<section class="page-intro"><div class="eyebrow">Seguimiento médico</div><h1>Consultas médicas</h1><p>Revisa las atenciones realizadas y los tratamientos indicados.</p></section>
+<section class="panel">
+  <div class="section-heading"><div><h2>Atenciones registradas</h2><p>Consulta el motivo, diagnóstico y tratamiento de cada visita.</p></div><button class="button" id="reload" type="button">Actualizar listado</button></div>
+  <div id="msg" class="notice" role="status" aria-live="polite"></div><div id="list" class="record-list"></div>
+</section>
 <script>
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-async function load(){const msg=document.getElementById("msg"),list=document.getElementById("list");msg.textContent="Cargando...";try{
- const r=await fetch("/api/consultas");if(!r.ok)throw Error("HTTP "+r.status);const data=await r.json();
- msg.textContent=data.length+" ficha(s) encontrada(s).";
- list.innerHTML=data.length?data.map(c=>`<article class="card"><strong>${esc(c.mascota?.nombre||("Mascota #"+c.mascotaId))} · ${esc(c.veterinarioNombre)}</strong><br><span class="muted">${new Date(c.fechaConsulta).toLocaleString("es-PE")}</span><br>Motivo: ${esc(c.motivo)}<br>Diagnóstico: ${esc(c.diagnostico)}${c.tratamiento?`<br>Tratamiento: ${esc(c.tratamiento)}`:""}${c.vacunasAplicadas?`<br>Vacunas: ${esc(c.vacunasAplicadas)}`:""}</article>`).join(""):'<div class="empty">Todavía no hay consultas registradas.</div>';
+async function load(){const msg=document.getElementById("msg"),list=document.getElementById("list");msg.textContent="Cargando atenciones...";msg.className="notice";try{
+ const response=await fetch("/api/consultas");if(!response.ok)throw Error("HTTP "+response.status);const rows=await response.json();
+ msg.textContent=rows.length+" "+(rows.length===1?"atención encontrada.":"atenciones encontradas.");
+ list.innerHTML=rows.length?rows.map(c=>`<article class="record-card"><div class="record-header"><div><span class="record-label">${esc(c.veterinarioNombre)}</span><h3>${esc(c.mascota?.nombre||("Mascota #"+c.mascotaId))}</h3></div><time class="record-date">${new Date(c.fechaConsulta).toLocaleString("es-PE")}</time></div><dl class="record-details"><div><dt>Motivo</dt><dd>${esc(c.motivo)}</dd></div><div><dt>Diagnóstico</dt><dd>${esc(c.diagnostico)}</dd></div>${c.tratamiento?`<div><dt>Tratamiento</dt><dd>${esc(c.tratamiento)}</dd></div>`:""}${c.vacunasAplicadas?`<div><dt>Vacunas</dt><dd>${esc(c.vacunasAplicadas)}</dd></div>`:""}</dl></article>`).join(""):'<div class="empty">Todavía no hay consultas registradas.</div>';
  }catch(e){msg.textContent="No se pudo cargar: "+e.message;msg.className="notice error";}}
 document.getElementById("reload").onclick=load;load();
 </script></main></body></html>

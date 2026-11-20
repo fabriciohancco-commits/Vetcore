@@ -186,6 +186,96 @@ body {
   font-size:18px;
   margin:0 0 18px
 }
+.page-intro {
+  margin:0 0 20px;
+  padding:24px 28px;
+  border:1px solid #d8e9df;
+  border-radius:20px;
+  background:linear-gradient(115deg,#fff 0%,#f5fbf7 68%,#e5f4eb 100%);
+  box-shadow:0 8px 24px #193d2b0a
+}
+.page-intro h1 {
+  margin:8px 0 5px;
+  font-size:clamp(28px,3.5vw,38px);
+  letter-spacing:-.04em
+}
+.page-intro p,.section-heading p {
+  margin:0;
+  color:#64716d
+}
+.section-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px
+}
+.section-heading h2 {
+  margin:0 0 5px
+}
+.filter-bar {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:end;
+  gap:12px
+}
+.filter-bar .field {
+  display:flex;
+  flex-direction:column;
+  gap:6px
+}
+.record-list {
+  display:grid;
+  gap:12px;
+  margin-top:14px
+}
+.record-card {
+  padding:18px;
+  border:1px solid #e3ebe6;
+  border-radius:14px;
+  background:linear-gradient(135deg,#fff,#fbfdfb)
+}
+.record-header {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px
+}
+.record-header h3 {
+  margin:4px 0 0;
+  font-size:17px
+}
+.record-label,.record-date {
+  color:#68756f;
+  font-size:12px
+}
+.record-date {
+  white-space:nowrap;
+  padding:6px 9px;
+  border-radius:99px;
+  background:#eff5f1
+}
+.record-details {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px 18px;
+  margin:16px 0 0;
+  padding-top:14px;
+  border-top:1px solid #e7eee9
+}
+.record-details dt {
+  margin-bottom:4px;
+  color:#718078;
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.06em
+}
+.record-details dd {
+  margin:0;
+  color:#26342e;
+  font-size:14px;
+  line-height:1.5
+}
 .fields {
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -365,6 +455,10 @@ textarea {
 .site-nav {
   justify-content:flex-start
 }
+.section-heading {
+  align-items:flex-start;
+  flex-direction:column
+}
 .layout {
   grid-template-columns:1fr
 }
@@ -384,6 +478,20 @@ textarea {
   grid-template-columns:1fr 1fr
 }
 
+}
+@media(max-width:520px) {
+  .filter-bar,.record-details {
+    grid-template-columns:1fr
+  }
+  .filter-bar .button {
+    width:100%
+  }
+  .page-intro {
+    padding:20px
+  }
+  .record-header {
+    flex-direction:column
+  }
 }
 @media(max-width:430px) {
   .summary {
