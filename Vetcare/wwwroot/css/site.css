@@ -271,6 +271,16 @@ body {
 .check-field input { width:18px; height:18px; margin:0; accent-color:var(--brand) }
 .medical-note { margin:0 0 18px; padding:13px 16px; border:1px solid #e6d6b8; border-radius:13px; background:#fff8eb; color:#755b2c }
 .pharmacy-layout,.operations-layout { align-items:start }
+.appointment-layout { align-items:start }
+.appointments-panel .muted,.appointment-history .muted { margin:5px 0 0; font-size:12px }
+.appointment-history { margin-top:18px }
+.appointment-meta { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:11px; color:var(--ink-soft); font-size:12px }
+.appointment-meta > span { padding:5px 8px; border-radius:99px; background:var(--surface-soft) }
+.appointment-meta .appointment-status { background:var(--brand-light); color:var(--brand-deep); font-weight:700 }
+.appointment-meta .status-pending { background:#fff0df; color:#855518 }
+.appointment-past { background:linear-gradient(135deg,#fff,#f7faf8) }
+.appointment-controls { display:flex; align-items:center; gap:10px; margin-top:12px; padding-top:12px; border-top:1px solid var(--line) }
+.appointment-controls select { width:auto; min-width:160px; padding:8px 10px }
 .pharmacy-prescriptions { margin-top:18px }
 .prescription-form { margin-top:20px }
 .medicine-meta { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:10px }
@@ -739,6 +749,7 @@ a { text-underline-offset:3px }
   .panel { padding:17px }
   .operation-controls select { flex:1; min-width:0 }
   .operation-controls .small { min-height:40px }
+  .appointment-controls select { flex:1; min-width:0 }
   .summary { grid-template-columns:1fr }
   .summary .metric:last-child { grid-column:auto }
   .page-intro {
