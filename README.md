@@ -55,4 +55,4 @@ Cada proyecto tiene su propio `.csproj` y referencias explícitas. Los contratos
 
 En la interfaz, `Vetcare/wwwroot/js/api.js` concentra las llamadas HTTP y utilidades compartidas. Cada pantalla usa un módulo independiente: `dashboard.js`, `consultas.js`, `historial.js`, `farmacia.js`, `operaciones.js` o `reportes.js`.
 
-La base de datos SQLite se crea al iniciar la aplicación. Los archivos de compilación y las preferencias locales de Rider se excluyen de Git.
+La base de datos SQLite se crea al iniciar la aplicación y conserva localmente propietarios, mascotas, medicamentos y recetas. El archivo de base de datos y sus archivos auxiliares se excluyen de Git; no se incluyen datos de clientes ni pacientes en los commits.
