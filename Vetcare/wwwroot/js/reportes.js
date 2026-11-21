@@ -5,9 +5,27 @@ const toInput = document.getElementById("hasta");
 const veterinarianInput = document.getElementById("vet");
 const filterForm = document.getElementById("report-filter-form");
 const runButton = document.getElementById("run");
+const pdfButton = document.getElementById("download-pdf");
 const message = document.getElementById("msg");
 const summary = document.getElementById("summary");
 const list = document.getElementById("list");
+
+function reportQuery() {
+  const query = new URLSearchParams();
+  if (fromInput.value) query.set("desde", fromInput.value);
+  if (toInput.value) query.set("hasta", toInput.value);
+  const veterinarian = veterinarianInput.value.trim();
+  if (veterinarian) query.set("veterinario", veterinarian);
+  return query;
+}
+
+function hasValidDateRange() {
+  if (fromInput.value && toInput.value && fromInput.value > toInput.value) {
+    setStatus(message, "La fecha inicial no puede ser posterior a la fecha final.", true);
+    return false;
+  }
+  return true;
+}
 
 function renderReport(rows) {
   const total = rows.reduce((count, row) => count + Number(row.totalAtenciones), 0);
@@ -45,19 +63,8 @@ function renderReport(rows) {
 }
 
 async function loadReport() {
-  const from = fromInput.value;
-  const to = toInput.value;
-
-  if (from && to && from > to) {
-    setStatus(message, "La fecha inicial no puede ser posterior a la fecha final.", true);
-    return;
-  }
-
-  const query = new URLSearchParams();
-  const veterinarian = veterinarianInput.value.trim();
-  if (from) query.set("desde", from);
-  if (to) query.set("hasta", to);
-  if (veterinarian) query.set("veterinario", veterinarian);
+  if (!hasValidDateRange()) return;
+  const query = reportQuery();
 
   runButton.disabled = true;
   setStatus(message, "Generando reporte...");
@@ -76,6 +83,41 @@ async function loadReport() {
 filterForm.addEventListener("submit", (event) => {
   event.preventDefault();
   loadReport();
+});
+
+pdfButton.addEventListener("click", async () => {
+  if (!hasValidDateRange()) return;
+  const token = sessionStorage.getItem("vetcare-access-token");
+  if (!token) {
+    window.location.replace("/login.html");
+    return;
+  }
+  pdfButton.disabled = true;
+  setStatus(message, "Preparando el PDF...");
+  try {
+    const response = await fetch(`/api/reportes/atenciones/pdf?${reportQuery()}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!response.ok) {
+      if (response.status === 401) {
+        sessionStorage.removeItem("vetcare-access-token");
+        window.location.replace("/login.html");
+      }
+      throw new Error(`La descarga falló (HTTP ${response.status}).`);
+    }
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `vetcare-atenciones-${new Date().toISOString().slice(0, 10)}.pdf`;
+    link.click();
+    URL.revokeObjectURL(url);
+    setStatus(message, "PDF descargado correctamente.");
+  } catch (error) {
+    setStatus(message, `No se pudo descargar el PDF: ${error.message}`, true);
+  } finally {
+    pdfButton.disabled = false;
+  }
 });
 
 filterForm.addEventListener("reset", () => {
