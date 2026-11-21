@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agenda de citas | VetCare Manager</title>
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body><main class="shell">
+  <header class="top site-header"><a class="brand" href="index.html"><span class="mark">✚</span><span>VetCare Manager</span></a><nav class="tabs site-nav" aria-label="Secciones">
+    <a class="tab" href="index.html">Pacientes</a><a class="tab active" href="citas.html" aria-current="page">Citas</a><a class="tab" href="consultas.html">Consultas</a><a class="tab" href="historial.html">Historial</a><a class="tab" href="farmacia.html">Farmacia</a><a class="tab" href="operaciones.html">Operaciones</a><a class="tab" href="reportes.html">Reportes</a>
+  </nav></header>
+  <section class="page-intro"><div class="eyebrow">Agenda de atención</div><h1>Citas veterinarias</h1><p>Organiza horarios por veterinario y consulta las atenciones anteriores.</p></section>
+  <section class="layout appointment-layout">
+    <form id="appointment-form" class="panel"><h2>Agendar una cita</h2><div class="fields">
+      <div class="field"><label for="appointment-owner">Dueño *</label><select id="appointment-owner" required><option value="">Cargando dueños…</option></select></div>
+      <div class="field"><label for="appointment-pet">Mascota *</label><select id="appointment-pet" required><option value="">Primero elige un dueño</option></select></div>
+      <div class="field"><label for="appointment-vet">Veterinario asignado *</label><input id="appointment-vet" required minlength="2" maxlength="150"></div>
+      <div class="field"><label for="appointment-date">Fecha y hora *</label><input id="appointment-date" type="datetime-local" required></div>
+      <div class="field"><label for="appointment-duration">Duración *</label><select id="appointment-duration" required><option value="15">15 minutos</option><option value="30" selected>30 minutos</option><option value="45">45 minutos</option><option value="60">1 hora</option><option value="90">1 h 30 min</option><option value="120">2 horas</option></select></div>
+      <div class="field full"><label for="appointment-reason">Motivo de la cita *</label><textarea id="appointment-reason" required minlength="3" maxlength="300" rows="3"></textarea></div>
+    </div><div class="actions"><button class="button" type="submit">Agendar cita</button><a class="button secondary" href="index.html">Registrar dueño o mascota</a></div><div id="appointment-notice" class="notice" role="status" aria-live="polite"></div></form>
+    <section class="panel appointments-panel"><div class="list-head"><div><h2>Próximas citas</h2><p class="muted">Al pasar su horario, se mueven al historial automáticamente.</p></div><span id="upcoming-count" class="count">0</span></div><div id="upcoming-list" class="record-list"></div></section>
+  </section>
+  <section class="panel appointment-history"><div class="list-head"><div><h2>Citas anteriores</h2><p class="muted">Las citas pasadas quedan aquí para cerrar su resultado.</p></div><button id="reload-appointments" class="small" type="button">Actualizar</button></div><div id="history-list" class="record-list"></div></section>
+  <footer class="foot">VetCare Manager · Agenda de citas</footer>
+</main><script type="module" src="js/citas.js"></script></body></html>
