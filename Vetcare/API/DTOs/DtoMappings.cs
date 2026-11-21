@@ -68,6 +68,9 @@ internal static class DtoMappings
         MedicamentoId = input.MedicamentoId,
         VeterinarioNombre = input.VeterinarioNombre,
         NumeroReceta = input.NumeroReceta,
+        Dosis = input.Dosis,
+        Frecuencia = input.Frecuencia,
+        Duracion = input.Duracion,
         Indicaciones = input.Indicaciones,
         Notas = input.Notas
     };
@@ -75,7 +78,8 @@ internal static class DtoMappings
     public static PrescripcionDto ToDto(this Prescripcion value) => new(
         value.Id, value.MascotaId, value.Mascota?.Nombre ?? "Mascota", value.MedicamentoId,
         value.Medicamento?.Nombre ?? "Medicamento", value.Medicamento?.RequiereReceta ?? false,
-        value.FechaRegistro, value.VeterinarioNombre, value.NumeroReceta, value.Indicaciones, value.Notas);
+        value.FechaRegistro, value.VeterinarioNombre, value.NumeroReceta, value.Dosis,
+        value.Frecuencia, value.Duracion, value.Indicaciones, value.Notas);
 
     public static Operacion ToEntity(this OperacionRequestDto input) => new()
     {

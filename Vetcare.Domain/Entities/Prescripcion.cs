@@ -21,6 +21,15 @@ public sealed class Prescripcion
     [StringLength(60)]
     public string? NumeroReceta { get; set; }
 
+    [Required, StringLength(100, MinimumLength = 1)]
+    public string Dosis { get; set; } = string.Empty;
+
+    [Required, StringLength(100, MinimumLength = 1)]
+    public string Frecuencia { get; set; } = string.Empty;
+
+    [Required, StringLength(100, MinimumLength = 1)]
+    public string Duracion { get; set; } = string.Empty;
+
     [Required, StringLength(1000, MinimumLength = 3)]
     public string Indicaciones { get; set; } = string.Empty;
 

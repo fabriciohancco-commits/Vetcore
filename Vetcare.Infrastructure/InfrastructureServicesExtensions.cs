@@ -52,6 +52,9 @@ public static class InfrastructureServicesExtensions
                 FechaRegistro TEXT NOT NULL,
                 VeterinarioNombre TEXT NOT NULL,
                 NumeroReceta TEXT NULL,
+                Dosis TEXT NOT NULL,
+                Frecuencia TEXT NOT NULL,
+                Duracion TEXT NOT NULL,
                 Indicaciones TEXT NOT NULL,
                 Notas TEXT NULL,
                 CONSTRAINT FK_Prescripciones_Mascotas_MascotaId FOREIGN KEY (MascotaId) REFERENCES Mascotas (Id) ON DELETE RESTRICT,
@@ -71,5 +74,28 @@ public static class InfrastructureServicesExtensions
             CREATE INDEX IF NOT EXISTS IX_Prescripciones_MedicamentoId ON Prescripciones (MedicamentoId);
             CREATE INDEX IF NOT EXISTS IX_Operaciones_MascotaId ON Operaciones (MascotaId);
             """);
+
+        await db.Database.OpenConnectionAsync();
+        try
+        {
+            var existingColumns = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            await using (var command = db.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "PRAGMA table_info('Prescripciones');";
+                await using var reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync()) existingColumns.Add(reader.GetString(1));
+            }
+
+            foreach (var column in new[] { "Dosis", "Frecuencia", "Duracion" })
+            {
+                if (!existingColumns.Contains(column))
+                    await db.Database.ExecuteSqlRawAsync(
+                        $"ALTER TABLE Prescripciones ADD COLUMN {column} TEXT NOT NULL DEFAULT ''; ");
+            }
+        }
+        finally
+        {
+            await db.Database.CloseConnectionAsync();
+        }
     }
 }
