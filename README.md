@@ -58,3 +58,8 @@ Cada proyecto tiene su propio `.csproj` y referencias explícitas. Los contratos
 En la interfaz, `Vetcare/wwwroot/js/api.js` concentra las llamadas HTTP y utilidades compartidas. Cada pantalla usa un módulo independiente: `dashboard.js`, `citas.js`, `consultas.js`, `historial.js`, `farmacia.js`, `operaciones.js` o `reportes.js`.
 
 La base de datos SQLite se crea al iniciar la aplicación y conserva localmente propietarios, mascotas, medicamentos y recetas. El archivo de base de datos y sus archivos auxiliares se excluyen de Git; no se incluyen datos de clientes ni pacientes en los commits.
+# VetCare Manager
+
+Sistema de gestión veterinaria con API REST en ASP.NET Core .NET 8, arquitectura por capas, casos de uso CQRS con MediatR, EF Core y SQLite. Incluye módulos de propietarios, mascotas, consultas clínicas, citas, farmacia, operaciones y reportes.
+
+La documentación para ejecutar la API, autenticación JWT y roles, rutas, ejemplos de solicitudes, reglas de negocio y migraciones está en [docs/api.md](docs/api.md). El diseño de capas se describe en [docs/arquitectura.md](docs/arquitectura.md). Los ejemplos para probar endpoints desde Rider o Visual Studio están en `Vetcare/Vetcare.http`.
