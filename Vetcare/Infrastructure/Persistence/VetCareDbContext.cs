@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Vetcare.Domain.Entities;
+using Vetcare.Domain.Ports.Repositories;
 
 namespace Vetcare.Infrastructure.Persistence;
 
 public sealed class VetCareDbContext(
-    DbContextOptions<VetCareDbContext> options) : DbContext(options)
+    DbContextOptions<VetCareDbContext> options) : DbContext(options), IUnitOfWork
 {
     public DbSet<Propietario> Propietarios => Set<Propietario>();
 

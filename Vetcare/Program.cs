@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Vetcare.Domain.Ports.Repositories;
+using Vetcare.Infrastructure.Adapters.Repositories.Implementation;
 using Vetcare.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<VetCareDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("VetCare") ?? "Data Source=vetcare.db"));
+builder.Services.AddScoped<IUnitOfWork>(services => services.GetRequiredService<VetCareDbContext>());
+builder.Services.AddScoped<IPropietarioRepository, PropietarioRepository>();
+builder.Services.AddScoped<IMascotaRepository, MascotaRepository>();
+builder.Services.AddScoped<IConsultaMedicaRepository, ConsultaMedicaRepository>();
 builder.Services.AddMediatR(configuration =>
     configuration.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
