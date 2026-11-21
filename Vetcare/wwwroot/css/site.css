@@ -519,6 +519,29 @@ textarea {
   color:#738079;
   font-size:14px
 }
+.loading-state {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:100px;
+  color:#718078;
+  font-size:13px
+}
+.spinner {
+  width:16px;
+  height:16px;
+  border:2px solid #dbe9df;
+  border-top-color:#176b55;
+  border-radius:50%;
+  animation:spin .8s linear infinite
+}
+@keyframes spin {
+  to { transform:rotate(360deg) }
+}
+.cards[aria-busy="true"] {
+  opacity:.72
+}
 .notice {
   min-height:22px;
   margin-top:14px;

@@ -114,6 +114,8 @@ function fillOwnerOptions(selectedId = "") {
 async function refreshDashboard() {
   const ownerQuery = new URLSearchParams({ search: $("owner-filter").value.trim() });
   const petQuery = new URLSearchParams({ search: $("pet-filter").value.trim() });
+  $("owner-list").setAttribute("aria-busy", "true");
+  $("pet-list").setAttribute("aria-busy", "true");
 
   try {
     [state.propietarios, state.mascotas] = await Promise.all([
@@ -125,6 +127,15 @@ async function refreshDashboard() {
     fillOwnerOptions($("pet-owner").value);
   } catch (error) {
     setNotice("owner-notice", error.message, true);
+    setNotice("pet-notice", error.message, true);
+    for (const [id, label] of [["owner-list", "propietarios"], ["pet-list", "mascotas"]]) {
+      if ($(id).querySelector(".loading-state")) {
+        $(id).innerHTML = `<div class="empty">No se pudieron cargar ${label}. Intenta actualizar la página.</div>`;
+      }
+    }
+  } finally {
+    $("owner-list").setAttribute("aria-busy", "false");
+    $("pet-list").setAttribute("aria-busy", "false");
   }
 }
 

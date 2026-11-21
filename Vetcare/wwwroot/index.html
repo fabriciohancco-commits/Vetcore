@@ -32,7 +32,7 @@
         <div class="field"><label for="owner-email">Correo</label><input id="owner-email" type="email" maxlength="120" autocomplete="email"></div>
         <div class="field full"><label for="owner-address">Dirección</label><input id="owner-address" maxlength="180" autocomplete="street-address"></div>
       </div><div class="actions"><button class="button" type="submit">Guardar propietario</button><button class="button secondary hidden" id="owner-cancel" type="button">Cancelar</button></div><div id="owner-notice" class="notice" role="status"></div></form>
-      <div class="panel"><div class="list-head"><h2>Propietarios registrados</h2><span id="owner-count" class="count">0 registros</span></div><form id="owner-search-form" class="search-bar"><label class="sr-only" for="owner-filter">Buscar propietario</label><input id="owner-filter" type="search" placeholder="Buscar propietario"><button class="small" type="submit">Buscar</button></form><div id="owner-list" class="cards"></div></div>
+      <div class="panel"><div class="list-head"><h2>Propietarios registrados</h2><span id="owner-count" class="count">0 registros</span></div><form id="owner-search-form" class="search-bar"><label class="sr-only" for="owner-filter">Buscar propietario</label><input id="owner-filter" type="search" placeholder="Buscar propietario"><button class="small" type="submit">Buscar</button></form><div id="owner-list" class="cards" aria-busy="true"><div class="loading-state"><span class="spinner" aria-hidden="true"></span>Cargando propietarios...</div></div></div>
     </section>
     <section id="mascotas" class="layout hidden">
       <form id="pet-form" class="panel"><h2 id="pet-title">Registrar mascota</h2><input id="pet-id" type="hidden"><div class="fields">
@@ -44,7 +44,7 @@
         <div class="field"><label for="pet-owner">Propietario *</label><select id="pet-owner" required><option value="">Seleccionar propietario</option></select></div>
         <div class="field full"><label for="pet-notes">Observaciones médicas generales</label><textarea id="pet-notes" maxlength="500"></textarea></div>
       </div><div class="actions"><button class="button" type="submit">Guardar mascota</button><button class="button secondary hidden" id="pet-cancel" type="button">Cancelar</button></div><div id="pet-notice" class="notice" role="status"></div></form>
-      <div class="panel"><div class="list-head"><h2>Mascotas registradas</h2><span id="pet-count" class="count">0 registros</span></div><form id="pet-search-form" class="search-bar"><label class="sr-only" for="pet-filter">Buscar mascota</label><input id="pet-filter" type="search" placeholder="Buscar mascota"><button class="small" type="submit">Buscar</button></form><div id="pet-list" class="cards"></div></div>
+      <div class="panel"><div class="list-head"><h2>Mascotas registradas</h2><span id="pet-count" class="count">0 registros</span></div><form id="pet-search-form" class="search-bar"><label class="sr-only" for="pet-filter">Buscar mascota</label><input id="pet-filter" type="search" placeholder="Buscar mascota"><button class="small" type="submit">Buscar</button></form><div id="pet-list" class="cards" aria-busy="true"><div class="loading-state"><span class="spinner" aria-hidden="true"></span>Cargando mascotas...</div></div></div>
     </section>
     <footer class="foot">VetCare Manager · Clientes y mascotas</footer>
   </main>
