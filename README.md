@@ -53,4 +53,6 @@ Vetcore/
 
 Las carpetas representan responsabilidades distintas, pero actualmente compilan en un solo proyecto .NET. La interfaz comparte `Vetcare/wwwroot/css/site.css` y mantiene la navegación entre sus cuatro pantallas. El informe de referencia muestra esas capas como proyectos separados y describe una mesa de ayuda con otras tecnologías; VetCare conserva su propio dominio veterinario, SQLite y funciones. La guía de arquitectura explica también esta diferencia y cómo leerla.
 
+En la interfaz, `Vetcare/wwwroot/js/api.js` concentra las llamadas HTTP y utilidades compartidas. Cada pantalla usa un módulo independiente: `dashboard.js`, `consultas.js`, `historial.js` o `reportes.js`.
+
 La base de datos SQLite se crea al iniciar la aplicación. Los archivos de compilación y las preferencias locales de Rider se excluyen de Git.

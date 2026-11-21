@@ -24,6 +24,11 @@ Vetcore/
     │       └── VetCareDbContext.cs # EF Core y relaciones SQLite
     ├── wwwroot/              # Interfaz web y recursos estáticos
     │   ├── css/site.css      # Estilos compartidos de todas las páginas
+    │   ├── js/api.js         # Cliente HTTP, escape HTML y avisos
+    │   ├── js/dashboard.js   # Propietarios y mascotas
+    │   ├── js/consultas.js   # Listado de consultas médicas
+    │   ├── js/historial.js   # Historial por mascota
+    │   ├── js/reportes.js    # Filtros y resultados agregados
     │   ├── index.html        # Propietarios y mascotas
     │   ├── consultas.html    # Consultas médicas
     │   ├── historial.html   # Historial por mascota
@@ -38,7 +43,9 @@ Vetcore/
 - **Application:** define solicitudes CQRS y sus handlers con MediatR para propietarios, mascotas, consultas e informes.
 - **Domain:** contiene las entidades `Propietario`, `Mascota` y `ConsultaMedica`.
 - **Infrastructure:** configura EF Core, las relaciones entre entidades y la base SQLite.
-- **wwwroot:** sirve las páginas web que consumen los endpoints `/api`. Todas las vistas comparten `css/site.css` y un menú común para mantener la misma jerarquía visual.
+- **wwwroot:** sirve las páginas web que consumen los endpoints `/api`. Todas las vistas comparten `css/site.css`, el menú y el cliente `js/api.js`; cada pantalla mantiene su lógica en un módulo propio.
+
+Los módulos JavaScript usan `type="module"` y comparten las utilidades de `api.js`. Esto evita repetir el manejo de errores HTTP y el escape de texto que se muestra en las tarjetas.
 
 ## Recorrido de una solicitud
 
