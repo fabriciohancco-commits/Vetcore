@@ -22,8 +22,22 @@ public sealed class VetCareDbContext(
 
     public DbSet<Cita> Citas => Set<Cita>();
 
+    public DbSet<UsuarioSistema> UsuariosSistema => Set<UsuarioSistema>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<UsuarioSistema>()
+            .HasIndex(user => user.Correo)
+            .IsUnique();
+
+        modelBuilder.Entity<Medicamento>()
+            .Property(medicamento => medicamento.StockUnidades)
+            .IsConcurrencyToken();
+
+        modelBuilder.Entity<Prescripcion>()
+            .Property(prescripcion => prescripcion.UnidadesEntregadas)
+            .HasDefaultValue(1);
+
         modelBuilder.Entity<Propietario>()
             .HasMany<Mascota>()
             .WithOne()

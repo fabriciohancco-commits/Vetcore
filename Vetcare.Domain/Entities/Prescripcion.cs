@@ -13,6 +13,9 @@ public sealed class Prescripcion
     [Range(1, int.MaxValue)]
     public int MedicamentoId { get; set; }
 
+    [Range(1, 100000)]
+    public int UnidadesEntregadas { get; set; } = 1;
+
     public DateTime FechaRegistro { get; set; } = DateTime.Now;
 
     [Required, StringLength(150)]
