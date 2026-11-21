@@ -88,9 +88,15 @@ public static class InfrastructureServicesExtensions
 
             foreach (var column in new[] { "Dosis", "Frecuencia", "Duracion" })
             {
-                if (!existingColumns.Contains(column))
-                    await db.Database.ExecuteSqlRawAsync(
-                        $"ALTER TABLE Prescripciones ADD COLUMN {column} TEXT NOT NULL DEFAULT ''; ");
+                if (existingColumns.Contains(column)) continue;
+                await using var alterCommand = db.Database.GetDbConnection().CreateCommand();
+                alterCommand.CommandText = column switch
+                {
+                    "Dosis" => "ALTER TABLE Prescripciones ADD COLUMN Dosis TEXT NOT NULL DEFAULT '';",
+                    "Frecuencia" => "ALTER TABLE Prescripciones ADD COLUMN Frecuencia TEXT NOT NULL DEFAULT '';",
+                    _ => "ALTER TABLE Prescripciones ADD COLUMN Duracion TEXT NOT NULL DEFAULT '';"
+                };
+                await alterCommand.ExecuteNonQueryAsync();
             }
         }
         finally
