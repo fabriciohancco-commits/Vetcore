@@ -3,54 +3,84 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f7f4">
-  <title>VetCare Manager | Clientes y mascotas</title>
-  <link rel="stylesheet" href="css/site.css">
+  <meta name="theme-color" content="#123d38">
+  <title>VetCare Manager | Panel de clínica</title>
+  <link rel="stylesheet" href="css/site.css?v=dashboard-redesign-20261125">
 </head>
-<body>
-  <main class="shell">
-    <header class="top site-header"><a class="brand" href="index.html"><span class="mark">✚</span><span>VetCare Manager</span></a>
-      <nav class="tabs site-nav" aria-label="Secciones">
-        <button class="tab active" data-tab="propietarios">Propietarios</button>
-        <button class="tab" data-tab="mascotas">Mascotas</button>
-        <a class="tab" href="consultas.html">Consultas médicas</a>
-        <a class="tab" href="historial.html">Historial clínico</a>
-        <a class="tab" href="citas.html">Citas</a>
-        <a class="tab" href="farmacia.html">Farmacia</a>
-        <a class="tab" href="operaciones.html">Operaciones</a>
-        <a class="tab" href="reportes.html">Reportes</a>
+<body class="dashboard-page">
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html" aria-label="VetCare Manager, inicio">
+        <span class="mark" aria-hidden="true">✚</span>
+        <span class="brand-copy">VetCare <small>GESTIÓN VETERINARIA</small></span>
+      </a>
+
+      <div class="sidebar-label">ESPACIO DE TRABAJO</div>
+      <nav class="sidebar-nav" aria-label="Secciones de la clínica">
+        <button class="side-link tab active" data-tab="propietarios" type="button"><span class="side-icon" aria-hidden="true">♙</span><span>Propietarios</span></button>
+        <button class="side-link tab" data-tab="mascotas" type="button"><span class="side-icon" aria-hidden="true">♧</span><span>Mascotas</span></button>
+        <a class="side-link" href="consultas.html"><span class="side-icon" aria-hidden="true">＋</span><span>Consultas médicas</span></a>
+        <a class="side-link" href="historial.html"><span class="side-icon" aria-hidden="true">▤</span><span>Historial clínico</span></a>
+        <div class="sidebar-label sidebar-label-spaced">CLÍNICA</div>
+        <a class="side-link" href="citas.html"><span class="side-icon" aria-hidden="true">▦</span><span>Citas</span></a>
+        <a class="side-link" href="farmacia.html"><span class="side-icon" aria-hidden="true">✚</span><span>Farmacia</span></a>
+        <a class="side-link" href="operaciones.html"><span class="side-icon" aria-hidden="true">◷</span><span>Operaciones</span></a>
+        <a class="side-link" href="reportes.html"><span class="side-icon" aria-hidden="true">▥</span><span>Reportes</span></a>
       </nav>
-    </header>
-    <section class="intro"><div class="eyebrow">Administración de clínica</div><h1>Clientes y mascotas</h1><p>Organiza los datos de propietarios y el registro de sus pacientes.</p></section>
-    <section class="summary" aria-label="Resumen de la clínica">
-      <div class="metric"><span class="metric-icon" aria-hidden="true">♙</span><div><strong id="summary-owners">—</strong><span id="summary-owners-label">Propietarios registrados</span></div></div>
-      <div class="metric"><span class="metric-icon" aria-hidden="true">🐾</span><div><strong id="summary-pets">—</strong><span id="summary-pets-label">Mascotas registradas</span></div></div>
-      <div class="metric"><span class="metric-icon" aria-hidden="true">✚</span><div><strong>VetCare</strong><span>Tu clínica, organizada</span></div></div>
-    </section>
-    <section id="propietarios" class="layout">
-      <form id="owner-form" class="panel"><h2 id="owner-title">Nuevo propietario</h2><input id="owner-id" type="hidden"><div class="fields">
-        <div class="field"><label for="owner-first">Nombres *</label><input id="owner-first" required minlength="2" maxlength="80" autocomplete="given-name"></div>
-        <div class="field"><label for="owner-last">Apellidos *</label><input id="owner-last" required minlength="2" maxlength="100" autocomplete="family-name"></div>
-        <div class="field"><label for="owner-phone">Teléfono *</label><input id="owner-phone" required type="tel" maxlength="25" autocomplete="tel"></div>
-        <div class="field"><label for="owner-email">Correo</label><input id="owner-email" type="email" maxlength="120" autocomplete="email"></div>
-        <div class="field full"><label for="owner-address">Dirección</label><input id="owner-address" maxlength="180" autocomplete="street-address"></div>
-      </div><div class="actions"><button class="button" type="submit">Guardar propietario</button><button class="button secondary hidden" id="owner-cancel" type="button">Cancelar</button></div><div id="owner-notice" class="notice" role="status"></div></form>
-      <div class="panel"><div class="list-head"><h2>Propietarios registrados</h2><span id="owner-count" class="count">0 registros</span></div><form id="owner-search-form" class="search-bar"><label class="sr-only" for="owner-filter">Buscar propietario</label><input id="owner-filter" type="search" placeholder="Buscar propietario"><button class="small" type="submit">Buscar</button></form><div id="owner-list" class="cards" aria-busy="true"><div class="loading-state"><span class="spinner" aria-hidden="true"></span>Cargando propietarios...</div></div></div>
-    </section>
-    <section id="mascotas" class="layout hidden">
-      <form id="pet-form" class="panel"><h2 id="pet-title">Registrar mascota</h2><input id="pet-id" type="hidden"><div class="fields">
-        <div class="field"><label for="pet-name">Nombre *</label><input id="pet-name" required minlength="2" maxlength="80"></div>
-        <div class="field"><label for="pet-species">Especie *</label><select id="pet-species" required><option value="">Seleccionar</option><option>Perro</option><option>Gato</option><option>Ave</option><option>Conejo</option><option>Otro</option></select></div>
-        <div class="field"><label for="pet-breed">Raza</label><input id="pet-breed" maxlength="60"></div>
-        <div class="field"><label for="pet-birth">Fecha de nacimiento</label><input id="pet-birth" type="date"></div>
-        <div class="field"><label for="pet-weight">Peso (kg)</label><input id="pet-weight" type="number" min="0.01" max="500" step="0.01"></div>
-        <div class="field"><label for="pet-owner">Propietario *</label><select id="pet-owner" required><option value="">Seleccionar propietario</option></select></div>
-        <div class="field full"><label for="pet-notes">Observaciones médicas generales</label><textarea id="pet-notes" maxlength="500"></textarea></div>
-      </div><div class="actions"><button class="button" type="submit">Guardar mascota</button><button class="button secondary hidden" id="pet-cancel" type="button">Cancelar</button></div><div id="pet-notice" class="notice" role="status"></div></form>
-      <div class="panel"><div class="list-head"><h2>Mascotas registradas</h2><span id="pet-count" class="count">0 registros</span></div><form id="pet-search-form" class="search-bar"><label class="sr-only" for="pet-filter">Buscar mascota</label><input id="pet-filter" type="search" placeholder="Buscar mascota"><button class="small" type="submit">Buscar</button></form><div id="pet-list" class="cards" aria-busy="true"><div class="loading-state"><span class="spinner" aria-hidden="true"></span>Cargando mascotas...</div></div></div>
-    </section>
-    <footer class="foot">VetCare Manager · Clientes y mascotas</footer>
-  </main>
-<script type="module" src="js/dashboard.js"></script>
+
+      <div class="sidebar-bottom">
+        <div class="clinic-status"><span class="status-dot"></span><span><strong>Clínica activa</strong><small>Todos los módulos disponibles</small></span></div>
+        <div class="sidebar-footer">VetCare Manager <span>·</span> Panel de administración</div>
+      </div>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="workspace-topbar">
+        <div class="breadcrumbs"><span>Panel de gestión</span><span class="crumb-divider">/</span><strong>Clientes y mascotas</strong></div>
+        <div class="topbar-actions"><span class="system-status"><span class="status-dot"></span>Sistema operativo</span><a class="button topbar-button" href="citas.html">Agendar una cita <span aria-hidden="true">↗</span></a><button class="topbar-logout" type="button" data-logout>Cerrar sesión</button></div>
+      </header>
+
+      <div class="workspace-content">
+        <section class="welcome-block">
+          <div><div class="eyebrow">ADMINISTRACIÓN DE CLÍNICA</div><h1>Clientes y mascotas</h1><p>Una vista clara de tus propietarios y pacientes para que cada visita esté bien atendida.</p></div>
+          <div class="welcome-note"><span class="welcome-note-icon" aria-hidden="true">✦</span><span><strong>Todo en orden</strong><small>La información de tu clínica, en un solo lugar</small></span></div>
+        </section>
+
+        <section class="summary dashboard-summary" aria-label="Resumen de la clínica">
+          <article class="metric"><span class="metric-icon owner-icon" aria-hidden="true">♙</span><div><strong id="summary-owners">—</strong><span id="summary-owners-label">Propietarios registrados</span></div><span class="metric-caption">CLIENTES</span></article>
+          <article class="metric"><span class="metric-icon pet-icon" aria-hidden="true">🐾</span><div><strong id="summary-pets">—</strong><span id="summary-pets-label">Mascotas registradas</span></div><span class="metric-caption">PACIENTES</span></article>
+          <article class="metric"><span class="metric-icon clinic-icon" aria-hidden="true">✚</span><div><strong>VetCare</strong><span>Gestión clínica integral</span></div><span class="metric-caption">PLATAFORMA</span></article>
+        </section>
+
+        <section id="propietarios" class="layout dashboard-layout">
+          <form id="owner-form" class="panel dashboard-panel form-panel"><div class="panel-kicker">FICHA DE CLIENTE</div><h2 id="owner-title">Nuevo propietario</h2><p class="panel-description">Registra los datos de contacto del tutor.</p><input id="owner-id" type="hidden"><div class="fields">
+            <div class="field"><label for="owner-first">Nombres <span>*</span></label><input id="owner-first" required minlength="2" maxlength="80" autocomplete="given-name" placeholder="Ej. María"></div>
+            <div class="field"><label for="owner-last">Apellidos <span>*</span></label><input id="owner-last" required minlength="2" maxlength="100" autocomplete="family-name" placeholder="Ej. García López"></div>
+            <div class="field"><label for="owner-phone">Teléfono <span>*</span></label><input id="owner-phone" required type="tel" maxlength="25" autocomplete="tel" placeholder="+51 999 000 000"></div>
+            <div class="field"><label for="owner-email">Correo electrónico</label><input id="owner-email" type="email" maxlength="120" autocomplete="email" placeholder="correo@ejemplo.com"></div>
+            <div class="field full"><label for="owner-address">Dirección</label><input id="owner-address" maxlength="180" autocomplete="street-address" placeholder="Calle, distrito, ciudad"></div>
+          </div><div class="actions"><button class="button" type="submit">Guardar propietario <span aria-hidden="true">→</span></button><button class="button secondary hidden" id="owner-cancel" type="button">Cancelar</button></div><div id="owner-notice" class="notice" role="status"></div></form>
+
+          <section class="panel dashboard-panel list-panel" aria-labelledby="owners-heading"><div class="list-head"><div><div class="panel-kicker">DIRECTORIO</div><h2 id="owners-heading">Propietarios registrados</h2><p class="panel-description">Consulta y administra los contactos de la clínica.</p></div><span id="owner-count" class="count">0 registros</span></div><form id="owner-search-form" class="search-bar"><label class="sr-only" for="owner-filter">Buscar propietario</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="owner-filter" type="search" placeholder="Buscar por nombre, teléfono o correo"><button class="small" type="submit">Buscar</button></form><div id="owner-list" class="cards" aria-busy="true"><div class="loading-state"><span class="spinner" aria-hidden="true"></span>Cargando propietarios...</div></div></section>
+        </section>
+
+        <section id="mascotas" class="layout dashboard-layout hidden">
+          <form id="pet-form" class="panel dashboard-panel form-panel"><div class="panel-kicker">FICHA DE PACIENTE</div><h2 id="pet-title">Registrar mascota</h2><p class="panel-description">Añade una mascota y relaciónala con su propietario.</p><input id="pet-id" type="hidden"><div class="fields">
+            <div class="field"><label for="pet-name">Nombre <span>*</span></label><input id="pet-name" required minlength="2" maxlength="80" placeholder="Nombre de la mascota"></div>
+            <div class="field"><label for="pet-species">Especie <span>*</span></label><select id="pet-species" required><option value="">Seleccionar especie</option><option>Perro</option><option>Gato</option><option>Ave</option><option>Conejo</option><option>Otro</option></select></div>
+            <div class="field"><label for="pet-breed">Raza</label><input id="pet-breed" maxlength="60" placeholder="Raza (opcional)"></div>
+            <div class="field"><label for="pet-birth">Fecha de nacimiento</label><input id="pet-birth" type="date"></div>
+            <div class="field"><label for="pet-weight">Peso (kg)</label><input id="pet-weight" type="number" min="0.01" max="500" step="0.01" placeholder="0.00"></div>
+            <div class="field"><label for="pet-owner">Propietario <span>*</span></label><select id="pet-owner" required><option value="">Seleccionar propietario</option></select></div>
+            <div class="field full"><label for="pet-notes">Observaciones médicas generales</label><textarea id="pet-notes" maxlength="500" placeholder="Información importante para la atención"></textarea></div>
+          </div><div class="actions"><button class="button" type="submit">Guardar mascota <span aria-hidden="true">→</span></button><button class="button secondary hidden" id="pet-cancel" type="button">Cancelar</button></div><div id="pet-notice" class="notice" role="status"></div></form>
+
+          <section class="panel dashboard-panel list-panel" aria-labelledby="pets-heading"><div class="list-head"><div><div class="panel-kicker">DIRECTORIO</div><h2 id="pets-heading">Mascotas registradas</h2><p class="panel-description">Encuentra rápidamente la ficha de cada paciente.</p></div><span id="pet-count" class="count">0 registros</span></div><form id="pet-search-form" class="search-bar"><label class="sr-only" for="pet-filter">Buscar mascota</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="pet-filter" type="search" placeholder="Buscar por nombre, especie o raza"><button class="small" type="submit">Buscar</button></form><div id="pet-list" class="cards" aria-busy="true"><div class="loading-state"><span class="spinner" aria-hidden="true"></span>Cargando mascotas...</div></div></section>
+        </section>
+        <footer class="foot dashboard-foot">VetCare Manager <span>·</span> Administración de clínica</footer>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>

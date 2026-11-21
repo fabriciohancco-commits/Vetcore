@@ -295,4 +295,9 @@ document.querySelectorAll("button.tab[data-tab]").forEach((button) => {
   });
 });
 
+const requestedTab = window.location.hash.slice(1);
+if (requestedTab === "propietarios" || requestedTab === "mascotas") {
+  document.querySelector(`button.tab[data-tab="${requestedTab}"]`)?.click();
+}
+
 refreshDashboard();
