@@ -9,18 +9,13 @@ export async function apiRequest(path, options = {}) {
   });
 
   if (!response.ok) {
-    let message = "No se pudo completar la operación.";
-
-    try {
-      const data = await response.json();
-      message =
-        data.message ||
-        Object.values(data.errors || {}).flat().join(" ") ||
-        message;
-    } catch {
-      // Keep the default message when the server does not return JSON.
-    }
-
+    const body = await response.text();
+    let data = {};
+    try { data = body ? JSON.parse(body) : {}; } catch { /* Keep the status-based message. */ }
+    const validation = Object.values(data.errors || {}).flat().join(" ");
+    const message = data.message || data.detail || validation || (response.status === 404
+      ? `VetCare no encontró la ruta /api/${path}. Reinicia la aplicación desde Rider para cargar los módulos nuevos.`
+      : `La solicitud falló (HTTP ${response.status}).`);
     throw new Error(message);
   }
 
