@@ -15,4 +15,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.22" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vetcare.Domain\Vetcare.Domain.csproj" />
+  </ItemGroup>
 </Project>
