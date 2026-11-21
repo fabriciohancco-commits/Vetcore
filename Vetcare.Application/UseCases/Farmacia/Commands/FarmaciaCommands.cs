@@ -66,6 +66,8 @@ internal sealed class CreatePrescripcionHandler(
             ModelValidation.AddError(errors, nameof(value.MedicamentoId), "Selecciona un medicamento vigente del catálogo.");
         else if (!medicine.Activo)
             ModelValidation.AddError(errors, nameof(value.MedicamentoId), "El medicamento está inactivo.");
+        else if (medicine.StockUnidades < value.UnidadesEntregadas)
+            ModelValidation.AddError(errors, nameof(value.UnidadesEntregadas), "No hay existencias suficientes para entregar esa cantidad.");
         if (!await mascotas.ExistsAsync(value.MascotaId, cancellationToken))
             ModelValidation.AddError(errors, nameof(value.MascotaId), "La mascota seleccionada no existe.");
         if (medicine?.RequiereReceta == true && string.IsNullOrWhiteSpace(value.NumeroReceta))
@@ -73,6 +75,7 @@ internal sealed class CreatePrescripcionHandler(
         if (errors.Count > 0) return new(400, Errors: errors);
         value.FechaRegistro = DateTime.Now;
         prescripciones.Add(value);
+        medicine!.StockUnidades -= value.UnidadesEntregadas;
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return new(201, value);
     }
