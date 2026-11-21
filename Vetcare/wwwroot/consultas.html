@@ -1,16 +1,58 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Consultas médicas | VetCare Manager</title>
-<link rel="stylesheet" href="css/site.css">
-</head><body><main class="shell">
-<header class="top site-header"><a class="brand" href="index.html"><span class="mark">✚</span><span>VetCare Manager</span></a><nav class="tabs site-nav" aria-label="Secciones">
-<a class="tab" href="index.html">Pacientes</a><a class="tab" href="citas.html">Citas</a><a class="tab active" href="consultas.html" aria-current="page">Consultas</a><a class="tab" href="historial.html">Historial</a><a class="tab" href="farmacia.html">Farmacia</a><a class="tab" href="operaciones.html">Operaciones</a><a class="tab" href="reportes.html">Reportes</a>
-</nav></header>
-<section class="page-intro"><div class="eyebrow">Seguimiento médico</div><h1>Consultas médicas</h1><p>Revisa las atenciones realizadas y los tratamientos indicados.</p></section>
-<section class="panel">
-  <div class="section-heading"><div><h2>Atenciones registradas</h2><p>Consulta el motivo, diagnóstico y tratamiento de cada visita.</p></div><button class="button" id="reload" type="button">Actualizar listado</button></div>
-  <div id="msg" class="notice" role="status" aria-live="polite"></div><div id="list" class="record-list"></div>
-</section>
-<script type="module" src="js/consultas.js"></script></main></body></html>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123d38">
+  <title>Consultas médicas | VetCare Manager</title>
+  <link rel="stylesheet" href="css/site.css?v=dashboard-redesign-20261125">
+</head>
+<body class="dashboard-page">
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html" aria-label="VetCare Manager, inicio">
+        <span class="mark" aria-hidden="true">✚</span>
+        <span class="brand-copy">VetCare <small>GESTIÓN VETERINARIA</small></span>
+      </a>
+      <div class="sidebar-label">ESPACIO DE TRABAJO</div>
+      <nav class="sidebar-nav" aria-label="Secciones de la clínica">
+        <a class="side-link" href="index.html#propietarios"><span class="side-icon" aria-hidden="true">♙</span><span>Propietarios</span></a>
+        <a class="side-link" href="index.html#mascotas"><span class="side-icon" aria-hidden="true">♧</span><span>Mascotas</span></a>
+        <a class="side-link active" href="consultas.html" aria-current="page"><span class="side-icon" aria-hidden="true">＋</span><span>Consultas médicas</span></a>
+        <a class="side-link" href="historial.html"><span class="side-icon" aria-hidden="true">▤</span><span>Historial clínico</span></a>
+        <div class="sidebar-label sidebar-label-spaced">CLÍNICA</div>
+        <a class="side-link" href="citas.html"><span class="side-icon" aria-hidden="true">▦</span><span>Citas</span></a>
+        <a class="side-link" href="farmacia.html"><span class="side-icon" aria-hidden="true">✚</span><span>Farmacia</span></a>
+        <a class="side-link" href="operaciones.html"><span class="side-icon" aria-hidden="true">◷</span><span>Operaciones</span></a>
+        <a class="side-link" href="reportes.html"><span class="side-icon" aria-hidden="true">▥</span><span>Reportes</span></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="clinic-status"><span class="status-dot"></span><span><strong>Clínica activa</strong><small>Todos los módulos disponibles</small></span></div>
+        <div class="sidebar-footer">VetCare Manager <span>·</span> Panel de administración</div>
+      </div>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="workspace-topbar">
+        <div class="breadcrumbs"><span>Panel de gestión</span><span class="crumb-divider">/</span><strong>Consultas médicas</strong></div>
+        <div class="topbar-actions"><span class="system-status"><span class="status-dot"></span>Sistema operativo</span><a class="button topbar-button" href="index.html">Ver pacientes <span aria-hidden="true">↗</span></a><button class="topbar-logout" type="button" data-logout>Cerrar sesión</button></div>
+      </header>
+      <div class="workspace-content consultations-content">
+        <section class="welcome-block consultations-welcome">
+          <div><div class="eyebrow">SEGUIMIENTO MÉDICO</div><h1>Consultas médicas</h1><p>Revisa las atenciones realizadas y consulta sus diagnósticos y tratamientos.</p></div>
+        </section>
+        <section class="panel dashboard-panel consultations-panel" aria-labelledby="consultations-heading">
+          <div class="section-heading consultations-heading">
+            <div><div class="panel-kicker">REGISTRO CLÍNICO</div><h2 id="consultations-heading">Atenciones registradas</h2><p class="panel-description">Cada ficha reúne el motivo, diagnóstico y tratamiento indicado.</p></div>
+            <button class="button" id="reload" type="button"><span aria-hidden="true">↻</span> Actualizar listado</button>
+          </div>
+          <div id="msg" class="notice consultations-notice" role="status" aria-live="polite"></div>
+          <div id="list" class="record-list consultation-list"></div>
+        </section>
+        <footer class="foot dashboard-foot">VetCare Manager <span>·</span> Registro clínico</footer>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="js/consultas.js"></script>
+</body>
+</html>
