@@ -17,6 +17,7 @@ public sealed class PrescripcionRequestDto
 {
     [Range(1, int.MaxValue)] public int MascotaId { get; init; }
     [Range(1, int.MaxValue)] public int MedicamentoId { get; init; }
+    [Range(1, 100000)] public int UnidadesEntregadas { get; init; } = 1;
     [Required, StringLength(150)] public string VeterinarioNombre { get; init; } = string.Empty;
     [StringLength(60)] public string? NumeroReceta { get; init; }
     [Required, StringLength(100, MinimumLength = 1)] public string Dosis { get; init; } = string.Empty;
@@ -33,5 +34,5 @@ public sealed record MedicamentoDto(
 public sealed record PrescripcionDto(
     int Id, int MascotaId, string MascotaNombre, int MedicamentoId, string MedicamentoNombre,
     bool RequiereReceta, DateTime FechaRegistro, string VeterinarioNombre,
-    string? NumeroReceta, string Dosis, string Frecuencia, string Duracion,
+    string? NumeroReceta, int UnidadesEntregadas, string Dosis, string Frecuencia, string Duracion,
     string Indicaciones, string? Notas);
