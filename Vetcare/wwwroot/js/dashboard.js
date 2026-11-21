@@ -67,14 +67,18 @@ function renderPets() {
 
   $("pet-list").innerHTML = pets.map((pet) => `
     <article class="card">
-      <div>
-        <h3>${escapeHtml(pet.nombre)} <span class="pet-species">· ${escapeHtml(pet.especie)}</span></h3>
-        <p>${escapeHtml(pet.raza || "Raza no especificada")}${pet.pesoKg ? ` · ${escapeHtml(pet.pesoKg)} kg` : ""}<br>
-          Tutor: ${escapeHtml(ownerName(pet.propietarioId))}${pet.observaciones ? `<br>${escapeHtml(pet.observaciones)}` : ""}</p>
+      <div class="card-content">
+        <h3 class="pet-heading">${escapeHtml(pet.nombre)} <span class="species-badge">${escapeHtml(pet.especie)}</span></h3>
+        <div class="pet-facts">
+          <span>${escapeHtml(pet.raza || "Raza no especificada")}</span>
+          ${pet.pesoKg ? `<span>${escapeHtml(pet.pesoKg)} kg</span>` : ""}
+        </div>
+        <p class="card-subtext">Tutor: ${escapeHtml(ownerName(pet.propietarioId))}</p>
+        ${pet.observaciones ? `<p class="pet-observations">${escapeHtml(pet.observaciones)}</p>` : ""}
       </div>
       <div class="card-actions">
-        <button class="small" data-edit-pet="${pet.id}" type="button">Editar</button>
-        <button class="small danger" data-delete-pet="${pet.id}" type="button">Eliminar</button>
+        <button class="small" data-edit-pet="${pet.id}" aria-label="Editar a ${escapeHtml(pet.nombre)}" type="button">Editar</button>
+        <button class="small danger" data-delete-pet="${pet.id}" aria-label="Eliminar a ${escapeHtml(pet.nombre)}" type="button">Eliminar</button>
       </div>
     </article>`).join("");
 }
