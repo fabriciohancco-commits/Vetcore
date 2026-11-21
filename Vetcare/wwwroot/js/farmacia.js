@@ -50,6 +50,7 @@ async function loadPrescriptions() {
     <dl class="record-details"><div><dt>Indicaciones registradas</dt><dd>${escapeHtml(item.indicaciones)}</dd></div>
     ${item.requiereReceta ? `<div><dt>N.º de receta</dt><dd>${escapeHtml(item.numeroReceta)}</dd></div>` : ""}
     <div><dt>Dosis indicada</dt><dd>${escapeHtml(item.dosis)}</dd></div>
+    <div><dt>Unidades entregadas</dt><dd>${escapeHtml(item.unidadesEntregadas)}</dd></div>
     <div><dt>Frecuencia</dt><dd>${escapeHtml(item.frecuencia)}</dd></div>
     <div><dt>Duración</dt><dd>${escapeHtml(item.duracion)}</dd></div>
     ${item.notas ? `<div><dt>Seguimiento</dt><dd>${escapeHtml(item.notas)}</dd></div>` : ""}</dl></article>`).join("") : '<div class="empty">Todavía no hay indicaciones registradas.</div>';
@@ -90,6 +91,7 @@ prescriptionForm.addEventListener("submit", async (event) => {
   const payload = {
     mascotaId: Number(petSelect.value),
     medicamentoId: Number(medicineSelect.value),
+    unidadesEntregadas: Number(document.getElementById("prescription-units").value),
     veterinarioNombre: document.getElementById("prescription-vet").value.trim(),
     numeroReceta: rxNumber.value.trim() || null,
     dosis: document.getElementById("prescription-dose").value.trim(),

@@ -3,40 +3,64 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123d38">
   <title>Farmacia | VetCare Manager</title>
-  <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="css/site.css?v=dashboard-redesign-20261125">
 </head>
-<body><main class="shell">
-  <header class="top site-header"><a class="brand" href="index.html"><span class="mark">✚</span><span>VetCare Manager</span></a><nav class="tabs site-nav" aria-label="Secciones">
-    <a class="tab" href="index.html">Pacientes</a><a class="tab" href="citas.html">Citas</a><a class="tab" href="consultas.html">Consultas</a><a class="tab" href="historial.html">Historial</a><a class="tab active" href="farmacia.html" aria-current="page">Farmacia</a><a class="tab" href="operaciones.html">Operaciones</a><a class="tab" href="reportes.html">Reportes</a>
-  </nav></header>
-  <section class="page-intro"><div class="eyebrow">Inventario y tratamiento</div><h1>Farmacia veterinaria</h1><p>Controla existencias y registra las indicaciones prescritas para cada paciente.</p></section>
-  <p class="notice medical-note">Las indicaciones y dosis deben ser ingresadas por el veterinario responsable. VetCare no recomienda medicamentos ni genera dosis automáticamente.</p>
-  <section class="layout pharmacy-layout">
-    <form id="medicine-form" class="panel"><h2>Agregar medicamento</h2><div class="fields">
-      <div class="field"><label for="medicine-name">Nombre *</label><input id="medicine-name" required minlength="2" maxlength="120"></div>
-      <div class="field"><label for="medicine-active">Principio activo</label><input id="medicine-active" maxlength="120"></div>
-      <div class="field full"><label for="medicine-presentation">Presentación *</label><input id="medicine-presentation" placeholder="Ej.: frasco, caja, unidad" required maxlength="80"></div>
-      <div class="field"><label for="medicine-stock">Unidades disponibles *</label><input id="medicine-stock" type="number" min="0" max="100000" value="0" required></div>
-      <div class="field"><label for="medicine-minimum">Avisar con stock de *</label><input id="medicine-minimum" type="number" min="0" max="100000" value="5" required></div>
-      <div class="field"><label for="medicine-expiry">Vencimiento</label><input id="medicine-expiry" type="date"></div>
-      <label class="check-field"><input id="medicine-rx" type="checkbox"> Requiere receta veterinaria</label>
-    </div><div class="actions"><button class="button" type="submit">Guardar medicamento</button></div><div id="medicine-notice" class="notice" role="status" aria-live="polite"></div></form>
-    <section class="panel"><div class="list-head"><h2>Inventario</h2><span id="medicine-count" class="count">0</span></div><div id="medicine-list" class="cards" aria-live="polite"></div></section>
-  </section>
-  <section class="panel pharmacy-prescriptions"><div class="section-heading"><div><h2>Registrar medicamento para una mascota</h2><p>Conserva el nombre del profesional y sus instrucciones tal como fueron indicadas.</p></div></div>
-    <form id="prescription-form" class="prescription-form"><div class="fields">
-      <div class="field"><label for="prescription-pet">Mascota *</label><select id="prescription-pet" required><option value="">Cargando mascotas…</option></select></div>
-      <div class="field"><label for="prescription-medicine">Medicamento *</label><select id="prescription-medicine" required><option value="">Selecciona del inventario</option></select></div>
-      <div class="field"><label for="prescription-vet">Veterinario responsable *</label><input id="prescription-vet" required maxlength="150"></div>
-      <div id="prescription-number-field" class="field hidden"><label for="prescription-number">Número de receta *</label><input id="prescription-number" maxlength="60"></div>
-      <div class="field"><label for="prescription-dose">Dosis indicada por el veterinario *</label><input id="prescription-dose" required maxlength="100"></div>
-      <div class="field"><label for="prescription-frequency">Frecuencia indicada *</label><input id="prescription-frequency" required maxlength="100"></div>
-      <div class="field"><label for="prescription-duration">Duración indicada *</label><input id="prescription-duration" required maxlength="100"></div>
-      <div class="field full"><label for="prescription-directions">Indicaciones entregadas por el veterinario *</label><textarea id="prescription-directions" required minlength="3" maxlength="1000" rows="3" placeholder="Transcribe las indicaciones profesionales"></textarea></div>
-      <div class="field full"><label for="prescription-notes">Notas de seguimiento</label><input id="prescription-notes" maxlength="200"></div>
-    </div><div class="actions"><button class="button" type="submit">Guardar indicación</button></div><div id="prescription-notice" class="notice" role="status" aria-live="polite"></div></form>
-  </section>
-  <section class="panel pharmacy-prescriptions"><div class="list-head"><h2>Indicaciones registradas</h2><button class="small" id="reload-prescriptions" type="button">Actualizar</button></div><div id="prescription-list" class="record-list"></div></section>
-  <footer class="foot">VetCare Manager · Farmacia</footer>
-</main><script type="module" src="js/farmacia.js"></script></body></html>
+<body class="dashboard-page">
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html" aria-label="VetCare Manager, inicio"><span class="mark" aria-hidden="true">✚</span><span class="brand-copy">VetCare <small>GESTIÓN VETERINARIA</small></span></a>
+      <div class="sidebar-label">ESPACIO DE TRABAJO</div>
+      <nav class="sidebar-nav" aria-label="Secciones de la clínica">
+        <a class="side-link" href="index.html#propietarios"><span class="side-icon" aria-hidden="true">♙</span><span>Propietarios</span></a>
+        <a class="side-link" href="index.html#mascotas"><span class="side-icon" aria-hidden="true">♧</span><span>Mascotas</span></a>
+        <a class="side-link" href="consultas.html"><span class="side-icon" aria-hidden="true">＋</span><span>Consultas médicas</span></a>
+        <a class="side-link" href="historial.html"><span class="side-icon" aria-hidden="true">▤</span><span>Historial clínico</span></a>
+        <div class="sidebar-label sidebar-label-spaced">CLÍNICA</div>
+        <a class="side-link" href="citas.html"><span class="side-icon" aria-hidden="true">▦</span><span>Citas</span></a>
+        <a class="side-link active" href="farmacia.html" aria-current="page"><span class="side-icon" aria-hidden="true">✚</span><span>Farmacia</span></a>
+        <a class="side-link" href="operaciones.html"><span class="side-icon" aria-hidden="true">◷</span><span>Operaciones</span></a>
+        <a class="side-link" href="reportes.html"><span class="side-icon" aria-hidden="true">▥</span><span>Reportes</span></a>
+      </nav>
+      <div class="sidebar-bottom"><div class="clinic-status"><span class="status-dot"></span><span><strong>Clínica activa</strong><small>Todos los módulos disponibles</small></span></div><div class="sidebar-footer">VetCare Manager <span>·</span> Panel de administración</div></div>
+    </aside>
+    <main class="dashboard-main">
+      <header class="workspace-topbar"><div class="breadcrumbs"><span>Panel de gestión</span><span class="crumb-divider">/</span><strong>Farmacia</strong></div><div class="topbar-actions"><span class="system-status"><span class="status-dot"></span>Sistema operativo</span><a class="button topbar-button" href="index.html#mascotas">Ver pacientes <span aria-hidden="true">↗</span></a><button class="topbar-logout" type="button" data-logout>Cerrar sesión</button></div></header>
+      <div class="workspace-content">
+        <section class="welcome-block"><div><div class="eyebrow">INVENTARIO Y TRATAMIENTO</div><h1>Farmacia veterinaria</h1><p>Controla existencias y registra las indicaciones prescritas para cada paciente.</p></div></section>
+        <p class="notice medical-note dashboard-medical-note">Las indicaciones y dosis deben ser ingresadas por el veterinario responsable. VetCare no recomienda medicamentos ni genera dosis automáticamente.</p>
+        <section class="layout dashboard-layout pharmacy-layout">
+          <form id="medicine-form" class="panel dashboard-panel form-panel"><div class="panel-kicker">CONTROL DE INVENTARIO</div><h2>Agregar medicamento</h2><p class="panel-description">Registra presentación, existencias y vencimiento.</p><div class="fields">
+            <div class="field"><label for="medicine-name">Nombre *</label><input id="medicine-name" required minlength="2" maxlength="120" placeholder="Nombre comercial"></div>
+            <div class="field"><label for="medicine-active">Principio activo</label><input id="medicine-active" maxlength="120" placeholder="Opcional"></div>
+            <div class="field full"><label for="medicine-presentation">Presentación *</label><input id="medicine-presentation" placeholder="Ej.: frasco, caja, unidad" required maxlength="80"></div>
+            <div class="field"><label for="medicine-stock">Unidades disponibles *</label><input id="medicine-stock" type="number" min="0" max="100000" value="0" required></div>
+            <div class="field"><label for="medicine-minimum">Avisar con stock de *</label><input id="medicine-minimum" type="number" min="0" max="100000" value="5" required></div>
+            <div class="field"><label for="medicine-expiry">Vencimiento</label><input id="medicine-expiry" type="date"></div>
+            <label class="check-field"><input id="medicine-rx" type="checkbox"> Requiere receta veterinaria</label>
+          </div><div class="actions"><button class="button" type="submit">Guardar medicamento <span aria-hidden="true">→</span></button></div><div id="medicine-notice" class="notice" role="status" aria-live="polite"></div></form>
+          <section class="panel dashboard-panel"><div class="list-head"><div><div class="panel-kicker">EXISTENCIAS</div><h2>Inventario</h2></div><span id="medicine-count" class="count">0</span></div><div id="medicine-list" class="cards" aria-live="polite"></div></section>
+        </section>
+        <section class="panel dashboard-panel pharmacy-prescriptions"><div class="panel-kicker">TRATAMIENTO DEL PACIENTE</div><h2>Registrar medicamento para una mascota</h2><p class="panel-description">Conserva el nombre del profesional y sus instrucciones tal como fueron indicadas.</p>
+          <form id="prescription-form" class="prescription-form"><div class="fields">
+            <div class="field"><label for="prescription-pet">Mascota *</label><select id="prescription-pet" required><option value="">Cargando mascotas…</option></select></div>
+            <div class="field"><label for="prescription-medicine">Medicamento *</label><select id="prescription-medicine" required><option value="">Selecciona del inventario</option></select></div>
+            <div class="field"><label for="prescription-units">Unidades entregadas *</label><input id="prescription-units" type="number" min="1" max="100000" value="1" required></div>
+            <div class="field"><label for="prescription-vet">Veterinario responsable *</label><input id="prescription-vet" required maxlength="150"></div>
+            <div id="prescription-number-field" class="field hidden"><label for="prescription-number">Número de receta *</label><input id="prescription-number" maxlength="60"></div>
+            <div class="field"><label for="prescription-dose">Dosis indicada por el veterinario *</label><input id="prescription-dose" required maxlength="100"></div>
+            <div class="field"><label for="prescription-frequency">Frecuencia indicada *</label><input id="prescription-frequency" required maxlength="100"></div>
+            <div class="field"><label for="prescription-duration">Duración indicada *</label><input id="prescription-duration" required maxlength="100"></div>
+            <div class="field full"><label for="prescription-directions">Indicaciones entregadas por el veterinario *</label><textarea id="prescription-directions" required minlength="3" maxlength="1000" rows="3" placeholder="Transcribe las indicaciones profesionales"></textarea></div>
+            <div class="field full"><label for="prescription-notes">Notas de seguimiento</label><input id="prescription-notes" maxlength="200"></div>
+          </div><div class="actions"><button class="button" type="submit">Guardar indicación <span aria-hidden="true">→</span></button></div><div id="prescription-notice" class="notice" role="status" aria-live="polite"></div></form>
+        </section>
+        <section class="panel dashboard-panel pharmacy-prescriptions"><div class="list-head"><div><div class="panel-kicker">REGISTRO DE RECETAS</div><h2>Indicaciones registradas</h2></div><button class="small" id="reload-prescriptions" type="button">Actualizar</button></div><div id="prescription-list" class="record-list"></div></section>
+        <footer class="foot dashboard-foot">VetCare Manager <span>·</span> Farmacia veterinaria</footer>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="js/farmacia.js"></script>
+</body>
+</html>
