@@ -20,6 +20,8 @@ public sealed class VetCareDbContext(
 
     public DbSet<Operacion> Operaciones => Set<Operacion>();
 
+    public DbSet<Cita> Citas => Set<Cita>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Propietario>()
@@ -50,6 +52,18 @@ public sealed class VetCareDbContext(
             .HasOne(o => o.Mascota)
             .WithMany()
             .HasForeignKey(o => o.MascotaId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Cita>()
+            .HasOne(c => c.Propietario)
+            .WithMany()
+            .HasForeignKey(c => c.PropietarioId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Cita>()
+            .HasOne(c => c.Mascota)
+            .WithMany()
+            .HasForeignKey(c => c.MascotaId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

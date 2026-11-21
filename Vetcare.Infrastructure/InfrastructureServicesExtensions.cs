@@ -70,9 +70,24 @@ public static class InfrastructureServicesExtensions
                 Notas TEXT NULL,
                 CONSTRAINT FK_Operaciones_Mascotas_MascotaId FOREIGN KEY (MascotaId) REFERENCES Mascotas (Id) ON DELETE RESTRICT
             );
+            CREATE TABLE IF NOT EXISTS Citas (
+                Id INTEGER NOT NULL CONSTRAINT PK_Citas PRIMARY KEY AUTOINCREMENT,
+                PropietarioId INTEGER NOT NULL,
+                MascotaId INTEGER NOT NULL,
+                VeterinarioNombre TEXT NOT NULL,
+                FechaHora TEXT NOT NULL,
+                DuracionMinutos INTEGER NOT NULL,
+                Motivo TEXT NOT NULL,
+                Estado TEXT NOT NULL,
+                CONSTRAINT FK_Citas_Propietarios_PropietarioId FOREIGN KEY (PropietarioId) REFERENCES Propietarios (Id) ON DELETE RESTRICT,
+                CONSTRAINT FK_Citas_Mascotas_MascotaId FOREIGN KEY (MascotaId) REFERENCES Mascotas (Id) ON DELETE RESTRICT
+            );
             CREATE INDEX IF NOT EXISTS IX_Prescripciones_MascotaId ON Prescripciones (MascotaId);
             CREATE INDEX IF NOT EXISTS IX_Prescripciones_MedicamentoId ON Prescripciones (MedicamentoId);
             CREATE INDEX IF NOT EXISTS IX_Operaciones_MascotaId ON Operaciones (MascotaId);
+            CREATE INDEX IF NOT EXISTS IX_Citas_Veterinario_FechaHora ON Citas (VeterinarioNombre, FechaHora);
+            CREATE INDEX IF NOT EXISTS IX_Citas_PropietarioId ON Citas (PropietarioId);
+            CREATE INDEX IF NOT EXISTS IX_Citas_MascotaId ON Citas (MascotaId);
             """);
 
         await db.Database.OpenConnectionAsync();
