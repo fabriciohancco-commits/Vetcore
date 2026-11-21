@@ -1,23 +1,50 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reportes | VetCare Manager</title>
-<link rel="stylesheet" href="css/site.css">
-</head><body><main class="shell">
-<header class="top site-header"><a class="brand" href="index.html"><span class="mark">✚</span><span>VetCare Manager</span></a><nav class="tabs site-nav" aria-label="Secciones">
-<a class="tab" href="index.html">Pacientes</a><a class="tab" href="citas.html">Citas</a><a class="tab" href="consultas.html">Consultas</a><a class="tab" href="historial.html">Historial</a><a class="tab" href="farmacia.html">Farmacia</a><a class="tab" href="operaciones.html">Operaciones</a><a class="tab active" href="reportes.html" aria-current="page">Reportes</a>
-</nav></header>
-<section class="page-intro"><div class="eyebrow">Resumen de actividad</div><h1>Reportes de atenciones</h1><p>Explora la actividad clínica por fechas y veterinario.</p></section>
-<section class="panel">
-  <div class="section-heading"><div><h2>Filtrar atenciones</h2><p>Elige un rango de fechas y, si deseas, un veterinario.</p></div></div>
-  <form id="report-filter-form" class="filter-bar report-filters">
-    <div class="field"><label for="desde">Desde</label><input id="desde" type="date"></div>
-    <div class="field"><label for="hasta">Hasta</label><input id="hasta" type="date"></div>
-    <div class="field"><label for="vet">Veterinario</label><input id="vet" placeholder="Todos los veterinarios"></div>
-    <button class="button" id="run" type="submit">Generar reporte</button>
-    <button class="button secondary" type="reset">Limpiar filtros</button>
-  </form>
-  <div id="msg" class="notice" role="status" aria-live="polite"></div><div id="summary" class="report-summary" aria-live="polite"></div><div id="list" class="record-list"></div>
-</section>
-<script type="module" src="js/reportes.js"></script></main></body></html>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123d38">
+  <title>Reportes | VetCare Manager</title>
+  <link rel="stylesheet" href="css/site.css?v=dashboard-redesign-20261125">
+</head>
+<body class="dashboard-page">
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html" aria-label="VetCare Manager, inicio"><span class="mark" aria-hidden="true">✚</span><span class="brand-copy">VetCare <small>GESTIÓN VETERINARIA</small></span></a>
+      <div class="sidebar-label">ESPACIO DE TRABAJO</div>
+      <nav class="sidebar-nav" aria-label="Secciones de la clínica">
+        <a class="side-link" href="index.html#propietarios"><span class="side-icon" aria-hidden="true">♙</span><span>Propietarios</span></a>
+        <a class="side-link" href="index.html#mascotas"><span class="side-icon" aria-hidden="true">♧</span><span>Mascotas</span></a>
+        <a class="side-link" href="consultas.html"><span class="side-icon" aria-hidden="true">＋</span><span>Consultas médicas</span></a>
+        <a class="side-link" href="historial.html"><span class="side-icon" aria-hidden="true">▤</span><span>Historial clínico</span></a>
+        <div class="sidebar-label sidebar-label-spaced">CLÍNICA</div>
+        <a class="side-link" href="citas.html"><span class="side-icon" aria-hidden="true">▦</span><span>Citas</span></a>
+        <a class="side-link" href="farmacia.html"><span class="side-icon" aria-hidden="true">✚</span><span>Farmacia</span></a>
+        <a class="side-link" href="operaciones.html"><span class="side-icon" aria-hidden="true">◷</span><span>Operaciones</span></a>
+        <a class="side-link active" href="reportes.html" aria-current="page"><span class="side-icon" aria-hidden="true">▥</span><span>Reportes</span></a>
+      </nav>
+      <div class="sidebar-bottom"><div class="clinic-status"><span class="status-dot"></span><span><strong>Clínica activa</strong><small>Todos los módulos disponibles</small></span></div><div class="sidebar-footer">VetCare Manager <span>·</span> Panel de administración</div></div>
+    </aside>
+    <main class="dashboard-main">
+      <header class="workspace-topbar"><div class="breadcrumbs"><span>Panel de gestión</span><span class="crumb-divider">/</span><strong>Reportes</strong></div><div class="topbar-actions"><span class="system-status"><span class="status-dot"></span>Sistema operativo</span><a class="button topbar-button" href="consultas.html">Ver consultas <span aria-hidden="true">↗</span></a><button class="topbar-logout" type="button" data-logout>Cerrar sesión</button></div></header>
+      <div class="workspace-content">
+        <section class="welcome-block"><div><div class="eyebrow">RESUMEN DE ACTIVIDAD</div><h1>Reportes de atenciones</h1><p>Explora la actividad clínica por fechas y veterinario.</p></div></section>
+        <section class="panel dashboard-panel reports-panel">
+          <div class="section-heading"><div><div class="panel-kicker">ANÁLISIS CLÍNICO</div><h2>Filtrar atenciones</h2><p class="panel-description">Elige un rango de fechas y, si deseas, un veterinario.</p></div></div>
+          <form id="report-filter-form" class="filter-bar report-filters">
+            <div class="field"><label for="desde">Desde</label><input id="desde" type="date"></div>
+            <div class="field"><label for="hasta">Hasta</label><input id="hasta" type="date"></div>
+            <div class="field"><label for="vet">Veterinario</label><input id="vet" placeholder="Todos los veterinarios"></div>
+            <button class="button" id="run" type="submit">Generar reporte <span aria-hidden="true">→</span></button>
+            <button class="button secondary" id="download-pdf" type="button">Descargar PDF</button>
+            <button class="button secondary" type="reset">Limpiar filtros</button>
+          </form>
+          <div id="msg" class="notice reports-notice" role="status" aria-live="polite"></div><div id="summary" class="report-summary" aria-live="polite"></div><div id="list" class="record-list"></div>
+        </section>
+        <footer class="foot dashboard-foot">VetCare Manager <span>·</span> Reportes de atenciones</footer>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="js/reportes.js"></script>
+</body>
+</html>
