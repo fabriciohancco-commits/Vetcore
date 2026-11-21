@@ -7,6 +7,19 @@ function setNotice(id, message, isError = false) {
   setStatus($(id), message, isError);
 }
 
+async function runWithBusyButton(button, busyLabel, action) {
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = busyLabel;
+
+  try {
+    await action();
+  } finally {
+    button.disabled = false;
+    button.textContent = originalLabel;
+  }
+}
+
 function resetOwnerForm() {
   $("owner-form").reset();
   $("owner-id").value = "";
@@ -140,35 +153,41 @@ function petPayload() {
 async function saveOwner(event) {
   event.preventDefault();
   const id = $("owner-id").value;
+  const submitButton = event.currentTarget.querySelector('[type="submit"]');
 
-  try {
-    await apiRequest(id ? `propietarios/${id}` : "propietarios", {
-      method: id ? "PUT" : "POST",
-      body: JSON.stringify(ownerPayload()),
-    });
-    resetOwnerForm();
-    setNotice("owner-notice", "Propietario guardado correctamente.");
-    await refreshDashboard();
-  } catch (error) {
-    setNotice("owner-notice", error.message, true);
-  }
+  await runWithBusyButton(submitButton, "Guardando...", async () => {
+    try {
+      await apiRequest(id ? `propietarios/${id}` : "propietarios", {
+        method: id ? "PUT" : "POST",
+        body: JSON.stringify(ownerPayload()),
+      });
+      resetOwnerForm();
+      setNotice("owner-notice", "Propietario guardado correctamente.");
+      await refreshDashboard();
+    } catch (error) {
+      setNotice("owner-notice", error.message, true);
+    }
+  });
 }
 
 async function savePet(event) {
   event.preventDefault();
   const id = $("pet-id").value;
+  const submitButton = event.currentTarget.querySelector('[type="submit"]');
 
-  try {
-    await apiRequest(id ? `mascotas/${id}` : "mascotas", {
-      method: id ? "PUT" : "POST",
-      body: JSON.stringify(petPayload()),
-    });
-    resetPetForm();
-    setNotice("pet-notice", "Mascota guardada correctamente.");
-    await refreshDashboard();
-  } catch (error) {
-    setNotice("pet-notice", error.message, true);
-  }
+  await runWithBusyButton(submitButton, "Guardando...", async () => {
+    try {
+      await apiRequest(id ? `mascotas/${id}` : "mascotas", {
+        method: id ? "PUT" : "POST",
+        body: JSON.stringify(petPayload()),
+      });
+      resetPetForm();
+      setNotice("pet-notice", "Mascota guardada correctamente.");
+      await refreshDashboard();
+    } catch (error) {
+      setNotice("pet-notice", error.message, true);
+    }
+  });
 }
 
 function editOwner(ownerId) {
@@ -219,14 +238,16 @@ $("owner-form").addEventListener("submit", saveOwner);
 $("pet-form").addEventListener("submit", savePet);
 $("owner-cancel").addEventListener("click", resetOwnerForm);
 $("pet-cancel").addEventListener("click", resetPetForm);
-$("owner-search-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-  refreshDashboard();
-});
-$("pet-search-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-  refreshDashboard();
-});
+function bindSearchForm(formId) {
+  $(formId).addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = event.currentTarget.querySelector('[type="submit"]');
+    await runWithBusyButton(button, "Buscando...", refreshDashboard);
+  });
+}
+
+bindSearchForm("owner-search-form");
+bindSearchForm("pet-search-form");
 
 $("owner-list").addEventListener("click", (event) => {
   const editButton = event.target.closest("[data-edit-owner]");
