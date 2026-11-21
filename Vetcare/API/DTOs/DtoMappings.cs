@@ -94,4 +94,20 @@ internal static class DtoMappings
     public static OperacionDto ToDto(this Operacion value) => new(
         value.Id, value.MascotaId, value.Mascota?.Nombre ?? "Mascota", value.Procedimiento,
         value.VeterinarioNombre, value.FechaProgramada, value.Estado, value.Notas);
+
+    public static Cita ToEntity(this CitaRequestDto input) => new()
+    {
+        PropietarioId = input.PropietarioId,
+        MascotaId = input.MascotaId,
+        VeterinarioNombre = input.VeterinarioNombre,
+        FechaHora = input.FechaHora,
+        DuracionMinutos = input.DuracionMinutos,
+        Motivo = input.Motivo
+    };
+
+    public static CitaDto ToDto(this Cita value) => new(
+        value.Id, value.PropietarioId,
+        value.Propietario is null ? "Dueño" : $"{value.Propietario.Nombres} {value.Propietario.Apellidos}",
+        value.MascotaId, value.Mascota?.Nombre ?? "Mascota", value.VeterinarioNombre,
+        value.FechaHora, value.DuracionMinutos, value.Motivo, value.Estado);
 }
