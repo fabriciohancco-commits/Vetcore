@@ -435,6 +435,27 @@ textarea {
   font-size:15px;
   margin:0 0 5px
 }
+.card-content {
+  min-width:0
+}
+.contact-lines {
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px 14px;
+  margin-top:8px
+}
+.contact-lines a {
+  color:#176b55;
+  font-size:13px;
+  text-decoration:none
+}
+.contact-lines a:hover {
+  text-decoration:underline
+}
+.card-subtext {
+  margin:7px 0 0!important;
+  font-size:12px!important
+}
 .card p {
   font-size:13px;
   line-height:1.5;

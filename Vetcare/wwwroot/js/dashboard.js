@@ -40,14 +40,17 @@ function renderOwners() {
 
   $("owner-list").innerHTML = owners.map((owner) => `
     <article class="card">
-      <div>
+      <div class="card-content">
         <h3>${escapeHtml(owner.nombres)} ${escapeHtml(owner.apellidos)}</h3>
-        <p>${escapeHtml(owner.telefono)}${owner.correo ? ` · ${escapeHtml(owner.correo)}` : ""}<br>
-          ${escapeHtml(owner.direccion || "Sin dirección registrada")}</p>
+        <div class="contact-lines">
+          <a href="tel:${encodeURIComponent(owner.telefono)}">${escapeHtml(owner.telefono)}</a>
+          ${owner.correo ? `<a href="mailto:${encodeURIComponent(owner.correo)}">${escapeHtml(owner.correo)}</a>` : ""}
+        </div>
+        <p class="card-subtext">${escapeHtml(owner.direccion || "Sin dirección registrada")}</p>
       </div>
       <div class="card-actions">
-        <button class="small" data-edit-owner="${owner.id}" type="button">Editar</button>
-        <button class="small danger" data-delete-owner="${owner.id}" type="button">Eliminar</button>
+        <button class="small" data-edit-owner="${owner.id}" aria-label="Editar a ${escapeHtml(owner.nombres)}" type="button">Editar</button>
+        <button class="small danger" data-delete-owner="${owner.id}" aria-label="Eliminar a ${escapeHtml(owner.nombres)}" type="button">Eliminar</button>
       </div>
     </article>`).join("");
 }
