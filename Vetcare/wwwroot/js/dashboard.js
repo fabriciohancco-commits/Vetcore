@@ -32,6 +32,9 @@ function renderOwners() {
   const owners = state.propietarios;
   $("owner-count").textContent = `${owners.length} ${owners.length === 1 ? "registro" : "registros"}`;
   $("summary-owners").textContent = owners.length;
+  $("summary-owners-label").textContent = $("owner-filter").value.trim()
+    ? "Propietarios encontrados"
+    : "Propietarios registrados";
 
   if (owners.length === 0) {
     $("owner-list").innerHTML = '<div class="empty">Aún no hay propietarios. Registra el primero aquí.</div>';
@@ -59,6 +62,9 @@ function renderPets() {
   const pets = state.mascotas;
   $("pet-count").textContent = `${pets.length} ${pets.length === 1 ? "registro" : "registros"}`;
   $("summary-pets").textContent = pets.length;
+  $("summary-pets-label").textContent = $("pet-filter").value.trim()
+    ? "Mascotas encontradas"
+    : "Mascotas registradas";
 
   if (pets.length === 0) {
     $("pet-list").innerHTML = '<div class="empty">Aún no hay mascotas. Registra una cuando tengas un propietario.</div>';
