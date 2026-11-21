@@ -1,6 +1,133 @@
-@Vetcare_HostAddress = http://localhost:5002
+@baseUrl = http://localhost:5002
+@token = pega-aqui-el-accessToken-del-login
 
-GET {{Vetcare_HostAddress}}/weatherforecast/
+### Estado de la configuración de acceso
+GET {{baseUrl}}/api/auth/estado
 Accept: application/json
 
-###
+### Crear el primer administrador (solo Development y base sin usuarios)
+POST {{baseUrl}}/api/auth/configuracion-inicial
+Content-Type: application/json
+
+{
+  "correo": "admin@vetcare.local",
+  "contrasena": "Cambiar-Esta-Clave-2026!"
+}
+
+### Login (copiar accessToken de la respuesta a @token)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "correo": "admin@vetcare.local",
+  "contrasena": "Cambiar-Esta-Clave-2026!"
+}
+
+### Crear usuario con rol (solo Administrador)
+POST {{baseUrl}}/api/auth/usuarios
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "correo": "veterinario@vetcare.local",
+  "contrasena": "Clave-Segura-Para-Vet-2026!",
+  "rol": "Veterinario"
+}
+
+### Listar propietarios
+GET {{baseUrl}}/api/propietarios
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Registrar propietario
+POST {{baseUrl}}/api/propietarios
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombres": "Ana",
+  "apellidos": "Pérez",
+  "telefono": "+51999900000",
+  "correo": "ana@example.com",
+  "direccion": "Lima"
+}
+
+### Buscar mascotas
+GET {{baseUrl}}/api/mascotas?search=Kira
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Registrar consulta (usa un MascotaId existente)
+POST {{baseUrl}}/api/consultas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "mascotaId": 1,
+  "fechaConsulta": "2026-11-25T09:00:00",
+  "veterinarioNombre": "Dra. Salas",
+  "motivo": "Control anual",
+  "diagnostico": "Paciente estable",
+  "tratamiento": "Control en seis meses",
+  "vacunasAplicadas": "Antirrábica"
+}
+
+### Agendar cita (IDs existentes; un veterinario no puede tener cruce horario)
+POST {{baseUrl}}/api/citas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "propietarioId": 1,
+  "mascotaId": 1,
+  "veterinarioNombre": "Dra. Salas",
+  "fechaHora": "2026-11-26T10:00:00",
+  "duracionMinutos": 30,
+  "motivo": "Control"
+}
+
+### Consultar medicamentos
+GET {{baseUrl}}/api/farmacia/medicamentos
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Registrar medicamento (Administrador o Recepcionista)
+POST {{baseUrl}}/api/farmacia/medicamentos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Antiparasitario",
+  "principioActivo": "Ejemplo",
+  "presentacion": "Tableta",
+  "requiereReceta": true,
+  "stockUnidades": 30,
+  "stockMinimo": 5
+}
+
+### Registrar prescripción y descontar unidades (usa IDs existentes)
+POST {{baseUrl}}/api/farmacia/prescripciones
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "mascotaId": 1,
+  "medicamentoId": 1,
+  "unidadesEntregadas": 2,
+  "veterinarioNombre": "Dra. Salas",
+  "numeroReceta": "REC-001",
+  "dosis": "1 tableta",
+  "frecuencia": "Cada 24 horas",
+  "duracion": "2 días",
+  "indicaciones": "Administrar con alimento"
+}
+
+### Reporte JSON por fechas (Administrador o Veterinario)
+GET {{baseUrl}}/api/reportes/atenciones?desde=2026-01-01&hasta=2026-12-31
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Reporte descargable PDF
+GET {{baseUrl}}/api/reportes/atenciones/pdf?desde=2026-01-01&hasta=2026-12-31
+Authorization: Bearer {{token}}
+Accept: application/pdf
