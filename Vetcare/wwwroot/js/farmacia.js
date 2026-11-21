@@ -49,6 +49,9 @@ async function loadPrescriptions() {
     <time class="record-date">${new Date(item.fechaRegistro).toLocaleDateString("es-PE")}</time></div>
     <dl class="record-details"><div><dt>Indicaciones registradas</dt><dd>${escapeHtml(item.indicaciones)}</dd></div>
     ${item.requiereReceta ? `<div><dt>N.º de receta</dt><dd>${escapeHtml(item.numeroReceta)}</dd></div>` : ""}
+    <div><dt>Dosis indicada</dt><dd>${escapeHtml(item.dosis)}</dd></div>
+    <div><dt>Frecuencia</dt><dd>${escapeHtml(item.frecuencia)}</dd></div>
+    <div><dt>Duración</dt><dd>${escapeHtml(item.duracion)}</dd></div>
     ${item.notas ? `<div><dt>Seguimiento</dt><dd>${escapeHtml(item.notas)}</dd></div>` : ""}</dl></article>`).join("") : '<div class="empty">Todavía no hay indicaciones registradas.</div>';
 }
 
@@ -89,6 +92,9 @@ prescriptionForm.addEventListener("submit", async (event) => {
     medicamentoId: Number(medicineSelect.value),
     veterinarioNombre: document.getElementById("prescription-vet").value.trim(),
     numeroReceta: rxNumber.value.trim() || null,
+    dosis: document.getElementById("prescription-dose").value.trim(),
+    frecuencia: document.getElementById("prescription-frequency").value.trim(),
+    duracion: document.getElementById("prescription-duration").value.trim(),
     indicaciones: document.getElementById("prescription-directions").value.trim(),
     notas: document.getElementById("prescription-notes").value.trim() || null,
   };
