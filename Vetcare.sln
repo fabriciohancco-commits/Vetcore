@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetcare", "Vetcare\Vetcare.csproj", "{39611860-C47A-4B7D-A788-8480D9CFF5D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetcare.API", "Vetcare\Vetcare.csproj", "{39611860-C47A-4B7D-A788-8480D9CFF5D9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetcare.Domain", "Vetcare.Domain\Vetcare.Domain.csproj", "{07AF9D6E-2E70-4012-90AB-9C148ADDA75F}"
 EndProject

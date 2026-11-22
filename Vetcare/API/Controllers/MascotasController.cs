@@ -1,8 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Vetcare.API.DTOs;
-using Vetcare.Application.Consultas;
-using Vetcare.Application.Mascotas;
+using Vetcare.Application.UseCases.Consultas.Queries;
+using Vetcare.Application.UseCases.Mascotas.Commands;
+using Vetcare.Application.UseCases.Mascotas.Queries;
 
 namespace Vetcare.API.Controllers;
 

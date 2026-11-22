@@ -3,19 +3,11 @@ using Vetcare.Application.Common;
 using Vetcare.Domain.Entities;
 using Vetcare.Domain.Ports.Repositories;
 
-namespace Vetcare.Application.Propietarios;
+namespace Vetcare.Application.UseCases.Propietarios.Commands;
 
-public sealed record ListPropietariosQuery(string? Search = null) : IRequest<List<Propietario>>;
 public sealed record CreatePropietarioCommand(Propietario Propietario) : IRequest<OperationResult<Propietario>>;
 public sealed record UpdatePropietarioCommand(int Id, Propietario Propietario) : IRequest<OperationResult<Propietario>>;
 public sealed record DeletePropietarioCommand(int Id) : IRequest<OperationResult<bool>>;
-
-internal sealed class ListPropietariosHandler(IPropietarioRepository propietarios)
-    : IRequestHandler<ListPropietariosQuery, List<Propietario>>
-{
-    public Task<List<Propietario>> Handle(ListPropietariosQuery request, CancellationToken cancellationToken) =>
-        propietarios.ListAsync(request.Search, cancellationToken);
-}
 
 internal sealed class CreatePropietarioHandler(
     IPropietarioRepository propietarios,

@@ -3,44 +3,11 @@ using Vetcare.Application.Common;
 using Vetcare.Domain.Entities;
 using Vetcare.Domain.Ports.Repositories;
 
-namespace Vetcare.Application.Consultas;
+namespace Vetcare.Application.UseCases.Consultas.Commands;
 
-public sealed record ListConsultasQuery : IRequest<List<ConsultaMedica>>;
-public sealed record GetConsultaQuery(int Id) : IRequest<ConsultaMedica?>;
-public sealed record GetHistorialMascotaQuery(int MascotaId) : IRequest<HistorialMascotaResult?>;
-public sealed record HistorialMascotaResult(List<ConsultaMedica> Consultas);
 public sealed record CreateConsultaCommand(ConsultaMedica Consulta) : IRequest<OperationResult<ConsultaMedica>>;
 public sealed record UpdateConsultaCommand(int Id, ConsultaMedica Consulta) : IRequest<OperationResult<ConsultaMedica>>;
 public sealed record DeleteConsultaCommand(int Id) : IRequest<OperationResult<bool>>;
-
-internal sealed class ListConsultasHandler(IConsultaMedicaRepository consultas)
-    : IRequestHandler<ListConsultasQuery, List<ConsultaMedica>>
-{
-    public Task<List<ConsultaMedica>> Handle(ListConsultasQuery request, CancellationToken cancellationToken) =>
-        consultas.ListAsync(cancellationToken);
-}
-
-internal sealed class GetConsultaHandler(IConsultaMedicaRepository consultas)
-    : IRequestHandler<GetConsultaQuery, ConsultaMedica?>
-{
-    public Task<ConsultaMedica?> Handle(GetConsultaQuery request, CancellationToken cancellationToken) =>
-        consultas.GetByIdAsync(request.Id, cancellationToken);
-}
-
-internal sealed class GetHistorialMascotaHandler(
-    IMascotaRepository mascotas,
-    IConsultaMedicaRepository consultas)
-    : IRequestHandler<GetHistorialMascotaQuery, HistorialMascotaResult?>
-{
-    public async Task<HistorialMascotaResult?> Handle(
-        GetHistorialMascotaQuery request,
-        CancellationToken cancellationToken)
-    {
-        if (!await mascotas.ExistsAsync(request.MascotaId, cancellationToken)) return null;
-        var history = await consultas.ListByMascotaAsync(request.MascotaId, cancellationToken);
-        return new(history);
-    }
-}
 
 internal sealed class CreateConsultaHandler(
     IConsultaMedicaRepository consultas,

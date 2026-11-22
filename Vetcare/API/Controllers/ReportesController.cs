@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Vetcare.Application.Reportes;
+using Vetcare.Application.UseCases.Reportes.Queries;
 
 namespace Vetcare.API.Controllers;
 

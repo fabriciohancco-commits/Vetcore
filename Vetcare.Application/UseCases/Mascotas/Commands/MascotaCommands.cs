@@ -3,19 +3,11 @@ using Vetcare.Application.Common;
 using Vetcare.Domain.Entities;
 using Vetcare.Domain.Ports.Repositories;
 
-namespace Vetcare.Application.Mascotas;
+namespace Vetcare.Application.UseCases.Mascotas.Commands;
 
-public sealed record ListMascotasQuery(string? Search = null) : IRequest<List<Mascota>>;
 public sealed record CreateMascotaCommand(Mascota Mascota) : IRequest<OperationResult<Mascota>>;
 public sealed record UpdateMascotaCommand(int Id, Mascota Mascota) : IRequest<OperationResult<Mascota>>;
 public sealed record DeleteMascotaCommand(int Id) : IRequest<OperationResult<bool>>;
-
-internal sealed class ListMascotasHandler(IMascotaRepository mascotas)
-    : IRequestHandler<ListMascotasQuery, List<Mascota>>
-{
-    public Task<List<Mascota>> Handle(ListMascotasQuery request, CancellationToken cancellationToken) =>
-        mascotas.ListAsync(request.Search, cancellationToken);
-}
 
 internal sealed class CreateMascotaHandler(
     IMascotaRepository mascotas,

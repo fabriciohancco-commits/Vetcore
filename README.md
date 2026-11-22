@@ -33,25 +33,20 @@ Abre `Vetcare.sln`, selecciona el perfil **VetCare** y pulsa **Run**. El perfil 
 
 ## Organización
 
-VetCare sigue una organización por capas dentro de una aplicación ASP.NET Core. La estructura completa, las responsabilidades de cada carpeta y el flujo de una petición están descritos en [docs/arquitectura.md](docs/arquitectura.md).
+VetCare está separado en cuatro proyectos .NET: API, Application, Domain e Infrastructure. La estructura completa, las dependencias entre proyectos y el recorrido de una petición están descritos en [docs/arquitectura.md](docs/arquitectura.md).
 
 ```text
 Vetcore/
 ├── Vetcare.sln
 ├── global.json
 ├── README.md
-└── Vetcare/                  # Una sola aplicación y un único dominio Vetcare
-    ├── API/                  # Controladores REST, DTOs y mapeos
-    ├── Application/          # Casos de uso CQRS con MediatR
-    ├── Domain/Entities/      # Propietario, mascota y consulta médica
-    ├── Infrastructure/       # Contexto de datos EF Core/SQLite
-    ├── Properties/           # Perfiles de ejecución
-    ├── wwwroot/              # Interfaz web y recursos estáticos
-    ├── Program.cs            # Composición e inicio de la aplicación
-    └── Vetcare.csproj        # Proyecto web .NET 8
+├── Vetcare/                  # Vetcare.API: HTTP, composición e interfaz web
+├── Vetcare.Application/      # Casos de uso y handlers CQRS
+├── Vetcare.Domain/           # Entidades y contratos de repositorio
+└── Vetcare.Infrastructure/   # EF Core, SQLite y adaptadores
 ```
 
-Las carpetas representan responsabilidades distintas, pero actualmente compilan en un solo proyecto .NET. La interfaz comparte `Vetcare/wwwroot/css/site.css` y mantiene la navegación entre sus cuatro pantallas. El informe de referencia muestra esas capas como proyectos separados y describe una mesa de ayuda con otras tecnologías; VetCare conserva su propio dominio veterinario, SQLite y funciones. La guía de arquitectura explica también esta diferencia y cómo leerla.
+Cada proyecto tiene su propio `.csproj` y referencias explícitas. Los contratos de los repositorios están en Domain; Application los usa en sus casos de uso; Infrastructure implementa esos contratos con EF Core; API conecta los servicios y expone los endpoints. La interfaz comparte `Vetcare/wwwroot/css/site.css` y mantiene la navegación entre sus cuatro pantallas.
 
 En la interfaz, `Vetcare/wwwroot/js/api.js` concentra las llamadas HTTP y utilidades compartidas. Cada pantalla usa un módulo independiente: `dashboard.js`, `consultas.js`, `historial.js` o `reportes.js`.
 

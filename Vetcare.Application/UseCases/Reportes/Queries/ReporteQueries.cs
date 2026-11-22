@@ -2,7 +2,7 @@ using MediatR;
 using Vetcare.Application.Common;
 using Vetcare.Domain.Ports.Repositories;
 
-namespace Vetcare.Application.Reportes;
+namespace Vetcare.Application.UseCases.Reportes.Queries;
 
 public sealed record GetReporteAtencionesQuery(DateTime? Desde, DateTime? Hasta, string? Veterinario)
     : IRequest<OperationResult<List<ReporteVeterinarioDto>>>;

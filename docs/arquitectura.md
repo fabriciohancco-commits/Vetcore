@@ -1,64 +1,80 @@
 # Arquitectura de VetCare
 
-VetCare es una aplicación web ASP.NET Core organizada en capas dentro de un único proyecto .NET. Esta estructura ayuda a ubicar cada responsabilidad; no crea cuatro ensamblados independientes.
+La solución separa la aplicación en cuatro proyectos .NET. Cada proyecto tiene un propósito y unas dependencias visibles en `Vetcare.sln`.
 
-## Mapa del repositorio
+## Estructura
 
 ```text
 Vetcore/
 ├── Vetcare.sln
-├── README.md
-└── Vetcare/
-    ├── API/
-│   ├── Controllers/          # Endpoints HTTP
-│   └── DTOs/                 # Contratos y conversión de datos
-    ├── Application/
-│   ├── Common/               # Resultado de operaciones y validación
-│   ├── Consultas/            # Casos de uso de consultas médicas
-│   ├── Mascotas/             # Casos de uso de mascotas
-│   ├── Propietarios/         # Casos de uso de propietarios
-│   └── Reportes/             # Consultas de reportes
-    ├── Domain/Entities/      # Entidades del negocio veterinario
-    ├── Infrastructure/
-    │   └── Persistence/
-    │       └── VetCareDbContext.cs # EF Core y relaciones SQLite
-    ├── wwwroot/              # Interfaz web y recursos estáticos
-    │   ├── css/site.css      # Estilos compartidos de todas las páginas
-    │   ├── js/api.js         # Cliente HTTP, escape HTML y avisos
-    │   ├── js/dashboard.js   # Propietarios y mascotas
-    │   ├── js/consultas.js   # Listado de consultas médicas
-    │   ├── js/historial.js   # Historial por mascota
-    │   ├── js/reportes.js    # Filtros y resultados agregados
-    │   ├── index.html        # Propietarios y mascotas
-    │   ├── consultas.html    # Consultas médicas
-    │   ├── historial.html   # Historial por mascota
-    │   └── reportes.html     # Resumen de atenciones
-    ├── Program.cs            # Configuración y composición
-    └── Vetcare.csproj
+├── Vetcare/                                  # Proyecto web Vetcare.API
+│   ├── API/
+│   │   ├── Controllers/                      # Endpoints HTTP
+│   │   └── DTOs/                             # Contratos HTTP y mapeos
+│   ├── Properties/                           # Perfiles de ejecución
+│   ├── wwwroot/                              # Interfaz web estática
+│   │   ├── css/site.css                      # Estilos compartidos
+│   │   ├── js/api.js                         # Cliente HTTP y utilidades
+│   │   ├── js/dashboard.js                   # Propietarios y mascotas
+│   │   ├── js/consultas.js                   # Consultas médicas
+│   │   ├── js/historial.js                   # Historial por mascota
+│   │   ├── js/reportes.js                    # Reportes de atenciones
+│   ├── Program.cs                            # Punto de composición
+│   └── Vetcare.csproj
+├── Vetcare.Application/
+│   ├── Common/                               # Validación y resultados
+│   ├── UseCases/
+│   │   ├── Consultas/{Commands,Queries}/
+│   │   ├── Mascotas/{Commands,Queries}/
+│   │   ├── Propietarios/{Commands,Queries}/
+│   │   └── Reportes/Queries/
+│   └── Vetcare.Application.csproj
+├── Vetcare.Domain/
+│   ├── Entities/                             # Propietario, Mascota, ConsultaMedica
+│   ├── Ports/Repositories/                   # Contratos por entidad y Unit of Work
+│   └── Vetcare.Domain.csproj
+└── Vetcare.Infrastructure/
+    ├── Adapters/Repositories/Implementation/ # Repositorios EF Core
+    ├── Persistence/                          # VetCareDbContext
+    ├── InfrastructureServicesExtensions.cs   # Registro e inicio de SQLite
+    └── Vetcare.Infrastructure.csproj
 ```
 
-## Responsabilidades
+## Qué va en cada proyecto
 
-- **API:** recibe solicitudes HTTP, valida su forma mediante DTOs y traduce resultados a respuestas HTTP.
-- **Application:** define solicitudes CQRS y sus handlers con MediatR para propietarios, mascotas, consultas e informes.
-- **Domain:** contiene las entidades `Propietario`, `Mascota` y `ConsultaMedica`.
-- **Infrastructure:** configura EF Core, las relaciones entre entidades y la base SQLite.
-- **wwwroot:** sirve las páginas web que consumen los endpoints `/api`. Todas las vistas comparten `css/site.css`, el menú y el cliente `js/api.js`; cada pantalla mantiene su lógica en un módulo propio.
+- **Vetcare.API:** recibe solicitudes HTTP, valida su forma mediante DTOs, traduce respuestas y configura el inicio de la aplicación.
+- **Vetcare.Application:** contiene los casos de uso CQRS. Los comandos modifican datos y las consultas recuperan datos; sus handlers dependen de contratos de Domain.
+- **Vetcare.Domain:** contiene las entidades del negocio veterinario y los puertos `IPropietarioRepository`, `IMascotaRepository`, `IConsultaMedicaRepository` e `IUnitOfWork`.
+- **Vetcare.Infrastructure:** implementa los puertos con EF Core y SQLite. Aquí viven el contexto, las búsquedas, la carga del historial, la agrupación de reportes y el registro de dependencias.
 
-Los módulos JavaScript usan `type="module"` y comparten las utilidades de `api.js`. Esto evita repetir el manejo de errores HTTP y el escape de texto que se muestra en las tarjetas.
+## Dependencias entre proyectos
+
+```text
+Vetcare.API ───────────────→ Vetcare.Application ─────→ Vetcare.Domain
+     │                                                   ↑
+     └──────────────────→ Vetcare.Infrastructure ───────┘
+```
+
+Application no referencia Infrastructure. Sus casos de uso hablan con interfaces; Infrastructure provee implementaciones concretas, y API conecta ambas piezas en el punto de composición.
 
 ## Recorrido de una solicitud
 
 ```text
-Navegador → API Controller → MediatR → Application Handler
-          → VetCareDbContext → SQLite
-          ← resultado HTTP ← respuesta del caso de uso
+Navegador → Controller → MediatR → Handler de Application
+                                  → interfaz del repositorio
+                                  → implementación EF Core → SQLite
+Navegador ← respuesta HTTP ← resultado del caso de uso
 ```
 
-`Program.cs` registra controladores, Swagger, MediatR y el contexto SQLite. En el entorno de desarrollo habilita Swagger; al iniciar crea el esquema de datos si todavía no existe.
+`Program.cs` registra los handlers de Application y llama a `AddInfrastructure`. El contexto SQLite crea el esquema inicial si todavía no existe. Las páginas estáticas de `wwwroot` consumen los endpoints `/api`.
 
-## Cómo se relaciona con el informe
+## Repositorios y Unit of Work
 
-El informe de referencia explica una mesa de ayuda y muestra API, Application, Domain e Infrastructure como proyectos separados, además de repositorios y Unit of Work. VetCare implementa un dominio distinto y mantiene esas responsabilidades en carpetas del proyecto web. Sus handlers usan actualmente `VetCareDbContext` directamente, así que la separación es organizativa y no una arquitectura hexagonal estricta. No se deben atribuir a VetCare tecnologías o funciones del informe como PostgreSQL, JWT, QuestPDF, usuarios técnicos o tickets.
+Los contratos no son archivos vacíos. Cada repositorio declara operaciones del dominio que necesita la aplicación:
 
-Si el proyecto crece, un siguiente paso de aprendizaje sería extraer cada capa a su propio proyecto .NET e introducir contratos de persistencia para que Application no dependa de Infrastructure. Esa refactorización requiere adaptar y compilar los casos de uso; esta guía documenta el estado real antes de dar ese paso.
+- `IPropietarioRepository` lista y busca propietarios, consulta si existen y evita eliminarlos cuando tienen mascotas.
+- `IMascotaRepository` lista y busca mascotas, las recupera por identificador y valida relaciones con propietarios.
+- `IConsultaMedicaRepository` lista consultas, obtiene el historial por mascota, protege la integridad y agrupa atenciones para los reportes.
+- `IUnitOfWork` confirma los cambios de un caso de uso mediante `SaveChangesAsync`.
+
+Las clases en `Vetcare.Infrastructure/Adapters/Repositories/Implementation` ejecutan estas operaciones con `VetCareDbContext`.
