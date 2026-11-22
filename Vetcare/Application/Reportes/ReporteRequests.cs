@@ -1,7 +1,6 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Vetcare.Application.Common;
-using Vetcare.Infrastructure.Persistence;
+using Vetcare.Domain.Ports.Repositories;
 
 namespace Vetcare.Application.Reportes;
 
@@ -14,34 +13,28 @@ public sealed class ReporteVeterinarioDto
     public int TotalAtenciones { get; set; }
 }
 
-internal sealed class GetReporteAtencionesHandler(VetCareDbContext db)
+internal sealed class GetReporteAtencionesHandler(IConsultaMedicaRepository consultas)
     : IRequestHandler<GetReporteAtencionesQuery, OperationResult<List<ReporteVeterinarioDto>>>
 {
     public async Task<OperationResult<List<ReporteVeterinarioDto>>> Handle(
-        GetReporteAtencionesQuery request, CancellationToken cancellationToken)
+        GetReporteAtencionesQuery request,
+        CancellationToken cancellationToken)
     {
-        if (request.Desde.HasValue && request.Hasta.HasValue && request.Desde.Value.Date > request.Hasta.Value.Date)
+        if (request.Desde.HasValue && request.Hasta.HasValue
+            && request.Desde.Value.Date > request.Hasta.Value.Date)
             return new(400, Message: "La fecha inicial no puede ser posterior a la fecha final.");
 
-        var consulta = db.ConsultasMedicas.AsNoTracking().AsQueryable();
-        if (request.Desde.HasValue)
-            consulta = consulta.Where(c => c.FechaConsulta >= request.Desde.Value.Date);
-        if (request.Hasta.HasValue)
+        var rows = await consultas.GetAtencionesPorVeterinarioAsync(
+            request.Desde,
+            request.Hasta,
+            request.Veterinario,
+            cancellationToken);
+        var report = rows.Select(row => new ReporteVeterinarioDto
         {
-            var limite = request.Hasta.Value.Date.AddDays(1);
-            consulta = consulta.Where(c => c.FechaConsulta < limite);
-        }
-        if (!string.IsNullOrWhiteSpace(request.Veterinario))
-            consulta = consulta.Where(c => c.VeterinarioNombre.Contains(request.Veterinario));
+            Veterinario = row.Veterinario,
+            TotalAtenciones = row.TotalAtenciones,
+        }).ToList();
 
-        var rows = await consulta.GroupBy(c => c.VeterinarioNombre)
-            .Select(grupo => new ReporteVeterinarioDto
-            {
-                Veterinario = grupo.Key,
-                TotalAtenciones = grupo.Count()
-            })
-            .OrderByDescending(row => row.TotalAtenciones)
-            .ToListAsync(cancellationToken);
-        return new(200, rows);
+        return new(200, report);
     }
 }

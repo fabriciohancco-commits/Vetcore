@@ -1,8 +1,7 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Vetcare.Application.Common;
 using Vetcare.Domain.Entities;
-using Vetcare.Infrastructure.Persistence;
+using Vetcare.Domain.Ports.Repositories;
 
 namespace Vetcare.Application.Mascotas;
 
@@ -11,74 +10,88 @@ public sealed record CreateMascotaCommand(Mascota Mascota) : IRequest<OperationR
 public sealed record UpdateMascotaCommand(int Id, Mascota Mascota) : IRequest<OperationResult<Mascota>>;
 public sealed record DeleteMascotaCommand(int Id) : IRequest<OperationResult<bool>>;
 
-internal sealed class ListMascotasHandler(VetCareDbContext db) : IRequestHandler<ListMascotasQuery, List<Mascota>>
+internal sealed class ListMascotasHandler(IMascotaRepository mascotas)
+    : IRequestHandler<ListMascotasQuery, List<Mascota>>
 {
-    public Task<List<Mascota>> Handle(ListMascotasQuery request, CancellationToken cancellationToken)
-    {
-        var mascotas = db.Mascotas.AsNoTracking();
-        if (!string.IsNullOrWhiteSpace(request.Search))
-        {
-            var term = request.Search.Trim();
-            mascotas = mascotas.Where(m => m.Nombre.Contains(term) || m.Especie.Contains(term) ||
-                (m.Raza != null && m.Raza.Contains(term)));
-        }
-
-        return mascotas.OrderBy(m => m.Nombre).ToListAsync(cancellationToken);
-    }
+    public Task<List<Mascota>> Handle(ListMascotasQuery request, CancellationToken cancellationToken) =>
+        mascotas.ListAsync(request.Search, cancellationToken);
 }
 
-internal sealed class CreateMascotaHandler(VetCareDbContext db) : IRequestHandler<CreateMascotaCommand, OperationResult<Mascota>>
+internal sealed class CreateMascotaHandler(
+    IMascotaRepository mascotas,
+    IPropietarioRepository propietarios,
+    IUnitOfWork unitOfWork)
+    : IRequestHandler<CreateMascotaCommand, OperationResult<Mascota>>
 {
-    public async Task<OperationResult<Mascota>> Handle(CreateMascotaCommand request, CancellationToken cancellationToken)
+    public async Task<OperationResult<Mascota>> Handle(
+        CreateMascotaCommand request,
+        CancellationToken cancellationToken)
     {
-        var mascota = request.Mascota;
-        var errors = ModelValidation.Validate(mascota);
-        if (mascota.FechaNacimiento > DateOnly.FromDateTime(DateTime.Today))
-            ModelValidation.AddError(errors, nameof(mascota.FechaNacimiento), "La fecha de nacimiento no puede ser futura.");
-        if (!await db.Propietarios.AnyAsync(p => p.Id == mascota.PropietarioId, cancellationToken))
-            ModelValidation.AddError(errors, nameof(mascota.PropietarioId), "El propietario seleccionado no existe.");
+        var pet = request.Mascota;
+        var errors = ModelValidation.Validate(pet);
+        if (pet.FechaNacimiento > DateOnly.FromDateTime(DateTime.Today))
+            ModelValidation.AddError(errors, nameof(pet.FechaNacimiento), "La fecha de nacimiento no puede ser futura.");
+        if (!await propietarios.ExistsAsync(pet.PropietarioId, cancellationToken))
+            ModelValidation.AddError(errors, nameof(pet.PropietarioId), "El propietario seleccionado no existe.");
         if (errors.Count > 0) return new(400, Errors: errors);
-        db.Mascotas.Add(mascota);
-        await db.SaveChangesAsync(cancellationToken);
-        return new(201, mascota);
+
+        mascotas.Add(pet);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        return new(201, pet);
     }
 }
 
-internal sealed class UpdateMascotaHandler(VetCareDbContext db) : IRequestHandler<UpdateMascotaCommand, OperationResult<Mascota>>
+internal sealed class UpdateMascotaHandler(
+    IMascotaRepository mascotas,
+    IPropietarioRepository propietarios,
+    IUnitOfWork unitOfWork)
+    : IRequestHandler<UpdateMascotaCommand, OperationResult<Mascota>>
 {
-    public async Task<OperationResult<Mascota>> Handle(UpdateMascotaCommand request, CancellationToken cancellationToken)
+    public async Task<OperationResult<Mascota>> Handle(
+        UpdateMascotaCommand request,
+        CancellationToken cancellationToken)
     {
-        var actual = await db.Mascotas.FindAsync([request.Id], cancellationToken);
-        if (actual is null) return new(404);
+        var current = await mascotas.GetByIdAsync(request.Id, cancellationToken);
+        if (current is null) return new(404);
+
         var input = request.Mascota;
         var errors = ModelValidation.Validate(input);
         if (input.FechaNacimiento > DateOnly.FromDateTime(DateTime.Today))
             ModelValidation.AddError(errors, nameof(input.FechaNacimiento), "La fecha de nacimiento no puede ser futura.");
-        if (!await db.Propietarios.AnyAsync(p => p.Id == input.PropietarioId, cancellationToken))
+        if (!await propietarios.ExistsAsync(input.PropietarioId, cancellationToken))
             ModelValidation.AddError(errors, nameof(input.PropietarioId), "El propietario seleccionado no existe.");
         if (errors.Count > 0) return new(400, Errors: errors);
-        actual.Nombre = input.Nombre;
-        actual.Especie = input.Especie;
-        actual.Raza = input.Raza;
-        actual.FechaNacimiento = input.FechaNacimiento;
-        actual.PesoKg = input.PesoKg;
-        actual.Observaciones = input.Observaciones;
-        actual.PropietarioId = input.PropietarioId;
-        await db.SaveChangesAsync(cancellationToken);
-        return new(200, actual);
+
+        current.Nombre = input.Nombre;
+        current.Especie = input.Especie;
+        current.Raza = input.Raza;
+        current.FechaNacimiento = input.FechaNacimiento;
+        current.PesoKg = input.PesoKg;
+        current.Observaciones = input.Observaciones;
+        current.PropietarioId = input.PropietarioId;
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        return new(200, current);
     }
 }
 
-internal sealed class DeleteMascotaHandler(VetCareDbContext db) : IRequestHandler<DeleteMascotaCommand, OperationResult<bool>>
+internal sealed class DeleteMascotaHandler(
+    IMascotaRepository mascotas,
+    IConsultaMedicaRepository consultas,
+    IUnitOfWork unitOfWork)
+    : IRequestHandler<DeleteMascotaCommand, OperationResult<bool>>
 {
-    public async Task<OperationResult<bool>> Handle(DeleteMascotaCommand request, CancellationToken cancellationToken)
+    public async Task<OperationResult<bool>> Handle(
+        DeleteMascotaCommand request,
+        CancellationToken cancellationToken)
     {
-        var mascota = await db.Mascotas.FindAsync([request.Id], cancellationToken);
-        if (mascota is null) return new(404);
-        if (await db.ConsultasMedicas.AnyAsync(c => c.MascotaId == request.Id, cancellationToken))
+        var pet = await mascotas.GetByIdAsync(request.Id, cancellationToken);
+        if (pet is null) return new(404);
+        if (await consultas.ExistsForMascotaAsync(request.Id, cancellationToken))
             return new(409, Message: "No se puede eliminar una mascota con consultas médicas registradas.");
-        db.Mascotas.Remove(mascota);
-        await db.SaveChangesAsync(cancellationToken);
+
+        mascotas.Remove(pet);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         return new(204, true);
     }
 }
