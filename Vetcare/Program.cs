@@ -1,19 +1,11 @@
-using Microsoft.EntityFrameworkCore;
 using Vetcare.Application;
-using Vetcare.Domain.Ports.Repositories;
-using Vetcare.Infrastructure.Adapters.Repositories.Implementation;
-using Vetcare.Infrastructure.Persistence;
+using Vetcare.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<VetCareDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("VetCare") ?? "Data Source=vetcare.db"));
-builder.Services.AddScoped<IUnitOfWork>(services => services.GetRequiredService<VetCareDbContext>());
-builder.Services.AddScoped<IPropietarioRepository, PropietarioRepository>();
-builder.Services.AddScoped<IMascotaRepository, MascotaRepository>();
-builder.Services.AddScoped<IConsultaMedicaRepository, ConsultaMedicaRepository>();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddMediatR(configuration =>
     configuration.RegisterServicesFromAssembly(typeof(ApplicationAssemblyMarker).Assembly));
 
@@ -29,11 +21,7 @@ app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<VetCareDbContext>();
-    db.Database.EnsureCreated();
-}
+await app.Services.InitializeDatabaseAsync();
 
 app.MapControllers();
 app.Run();
