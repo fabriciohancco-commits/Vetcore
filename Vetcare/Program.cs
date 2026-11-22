@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Vetcare.Application;
 using Vetcare.Domain.Ports.Repositories;
 using Vetcare.Infrastructure.Adapters.Repositories.Implementation;
 using Vetcare.Infrastructure.Persistence;
@@ -14,7 +15,7 @@ builder.Services.AddScoped<IPropietarioRepository, PropietarioRepository>();
 builder.Services.AddScoped<IMascotaRepository, MascotaRepository>();
 builder.Services.AddScoped<IConsultaMedicaRepository, ConsultaMedicaRepository>();
 builder.Services.AddMediatR(configuration =>
-    configuration.RegisterServicesFromAssembly(typeof(Program).Assembly));
+    configuration.RegisterServicesFromAssembly(typeof(ApplicationAssemblyMarker).Assembly));
 
 var app = builder.Build();
 
