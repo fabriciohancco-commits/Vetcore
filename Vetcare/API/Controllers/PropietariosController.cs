@@ -10,9 +10,10 @@ namespace Vetcare.API.Controllers;
 public sealed class PropietariosController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<PropietarioDto>>> Listar(CancellationToken cancellationToken)
+    public async Task<ActionResult<List<PropietarioDto>>> Listar(
+        [FromQuery] string? search, CancellationToken cancellationToken)
     {
-        var propietarios = await sender.Send(new ListPropietariosQuery(), cancellationToken);
+        var propietarios = await sender.Send(new ListPropietariosQuery(search), cancellationToken);
         return Ok(propietarios.Select(propietario => propietario.ToDto()).ToList());
     }
 
