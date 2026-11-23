@@ -46,4 +46,48 @@ internal static class DtoMappings
         new(value.Id, value.MascotaId, value.FechaConsulta, value.VeterinarioNombre,
             value.Motivo, value.Diagnostico, value.Tratamiento, value.VacunasAplicadas,
             value.Mascota?.ToDto());
+
+    public static Medicamento ToEntity(this MedicamentoRequestDto input) => new()
+    {
+        Nombre = input.Nombre,
+        PrincipioActivo = input.PrincipioActivo,
+        Presentacion = input.Presentacion,
+        RequiereReceta = input.RequiereReceta,
+        StockUnidades = input.StockUnidades,
+        StockMinimo = input.StockMinimo,
+        FechaVencimiento = input.FechaVencimiento
+    };
+
+    public static MedicamentoDto ToDto(this Medicamento value) => new(
+        value.Id, value.Nombre, value.PrincipioActivo, value.Presentacion, value.RequiereReceta,
+        value.StockUnidades, value.StockMinimo, value.FechaVencimiento, value.Activo);
+
+    public static Prescripcion ToEntity(this PrescripcionRequestDto input) => new()
+    {
+        MascotaId = input.MascotaId,
+        MedicamentoId = input.MedicamentoId,
+        VeterinarioNombre = input.VeterinarioNombre,
+        NumeroReceta = input.NumeroReceta,
+        Indicaciones = input.Indicaciones,
+        Notas = input.Notas
+    };
+
+    public static PrescripcionDto ToDto(this Prescripcion value) => new(
+        value.Id, value.MascotaId, value.Mascota?.Nombre ?? "Mascota", value.MedicamentoId,
+        value.Medicamento?.Nombre ?? "Medicamento", value.Medicamento?.RequiereReceta ?? false,
+        value.FechaRegistro, value.VeterinarioNombre, value.NumeroReceta, value.Indicaciones, value.Notas);
+
+    public static Operacion ToEntity(this OperacionRequestDto input) => new()
+    {
+        MascotaId = input.MascotaId,
+        Procedimiento = input.Procedimiento,
+        VeterinarioNombre = input.VeterinarioNombre,
+        FechaProgramada = input.FechaProgramada,
+        Estado = input.Estado,
+        Notas = input.Notas
+    };
+
+    public static OperacionDto ToDto(this Operacion value) => new(
+        value.Id, value.MascotaId, value.Mascota?.Nombre ?? "Mascota", value.Procedimiento,
+        value.VeterinarioNombre, value.FechaProgramada, value.Estado, value.Notas);
 }
