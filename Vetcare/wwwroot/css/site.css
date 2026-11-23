@@ -55,8 +55,17 @@ body {
 .site-nav {
   justify-content:flex-end;
   margin:0;
-  max-width:900px
+  max-width:900px;
+  padding:7px;
+  border:1px solid #ffffffb8;
+  border-radius:16px;
+  background:#ffffff9c;
+  box-shadow:0 8px 24px #163d320c;
+  backdrop-filter:blur(12px)
 }
+.site-header { position:relative; z-index:5; padding:8px 0 }
+.brand { letter-spacing:-.025em }
+.brand:hover { color:var(--brand) }
 .mark {
   display:grid;
   place-items:center;
@@ -165,10 +174,10 @@ body {
   flex-wrap:wrap
 }
 .tab {
-  border:1px solid #dce5df;
-  background:#fff;
-  color:#56635f;
-  border-radius:10px;
+  border:1px solid transparent;
+  background:transparent;
+  color:var(--ink-soft);
+  border-radius:11px;
   padding:10px 16px;
   font-size:14px;
   font-weight:650;
@@ -181,11 +190,12 @@ body {
   border-color:#b9d5c5
 }
 .tab.active {
-  background:#176b55;
-  border-color:#176b55;
+  background:linear-gradient(135deg,var(--brand),var(--brand-deep));
+  border-color:var(--brand);
   color:white;
-  box-shadow:0 5px 12px #176b5525
+  box-shadow:0 6px 14px #087b6633
 }
+.tab:hover:not(.active) { background:var(--brand-light); color:var(--brand-deep) }
 .layout {
   display:grid;
   grid-template-columns:minmax(280px,.8fr) minmax(0,1.5fr);
