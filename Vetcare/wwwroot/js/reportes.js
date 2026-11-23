@@ -21,15 +21,23 @@ function renderReport(rows) {
     return;
   }
 
+  const maximum = Math.max(...rows.map((row) => Number(row.totalAtenciones)));
+
   list.innerHTML = rows.map((row) => {
     const count = Number(row.totalAtenciones);
+    const percentage = maximum === 0 ? 0 : Math.round((count / maximum) * 100);
     const label = count === 1 ? "atención" : "atenciones";
+    const veterinarian = escapeHtml(row.veterinario);
 
     return `
       <article class="record-card report-row">
-        <div class="record-header">
-          <h3>${escapeHtml(row.veterinario)}</h3>
+        <div class="report-row-heading">
+          <h3>${veterinarian}</h3>
           <span class="record-date">${count} ${label}</span>
+        </div>
+        <div class="report-bar-track" role="meter" aria-label="Atenciones de ${veterinarian}"
+             aria-valuemin="0" aria-valuemax="${maximum}" aria-valuenow="${count}">
+          <span class="report-bar-fill" style="width:${percentage}%"></span>
         </div>
       </article>`;
   }).join("");

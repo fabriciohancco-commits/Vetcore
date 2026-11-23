@@ -247,13 +247,31 @@ body {
   letter-spacing:-.04em
 }
 .report-row {
-  padding:14px 18px
+  display:grid;
+  gap:12px;
+  padding:16px 18px
 }
-.report-row .record-header {
-  align-items:center
+.report-row-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
 }
-.report-row h3 {
+.report-row-heading h3 {
   margin:0
+}
+.report-bar-track {
+  height:8px;
+  overflow:hidden;
+  border-radius:99px;
+  background:#edf3ef
+}
+.report-bar-fill {
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#55a982,#176b55);
+  transition:width .25s ease
 }
 .record-list {
   display:grid;
@@ -628,6 +646,10 @@ textarea {
     padding:20px
   }
   .record-header {
+    flex-direction:column
+  }
+  .report-row-heading {
+    align-items:flex-start;
     flex-direction:column
   }
 }
