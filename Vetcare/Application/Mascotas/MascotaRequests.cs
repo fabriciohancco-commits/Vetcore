@@ -6,15 +6,25 @@ using Vetcare.Infrastructure.Persistence;
 
 namespace Vetcare.Application.Mascotas;
 
-public sealed record ListMascotasQuery : IRequest<List<Mascota>>;
+public sealed record ListMascotasQuery(string? Search = null) : IRequest<List<Mascota>>;
 public sealed record CreateMascotaCommand(Mascota Mascota) : IRequest<OperationResult<Mascota>>;
 public sealed record UpdateMascotaCommand(int Id, Mascota Mascota) : IRequest<OperationResult<Mascota>>;
 public sealed record DeleteMascotaCommand(int Id) : IRequest<OperationResult<bool>>;
 
 internal sealed class ListMascotasHandler(VetCareDbContext db) : IRequestHandler<ListMascotasQuery, List<Mascota>>
 {
-    public Task<List<Mascota>> Handle(ListMascotasQuery request, CancellationToken cancellationToken) =>
-        db.Mascotas.AsNoTracking().OrderBy(m => m.Nombre).ToListAsync(cancellationToken);
+    public Task<List<Mascota>> Handle(ListMascotasQuery request, CancellationToken cancellationToken)
+    {
+        var mascotas = db.Mascotas.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(request.Search))
+        {
+            var term = request.Search.Trim();
+            mascotas = mascotas.Where(m => m.Nombre.Contains(term) || m.Especie.Contains(term) ||
+                (m.Raza != null && m.Raza.Contains(term)));
+        }
+
+        return mascotas.OrderBy(m => m.Nombre).ToListAsync(cancellationToken);
+    }
 }
 
 internal sealed class CreateMascotaHandler(VetCareDbContext db) : IRequestHandler<CreateMascotaCommand, OperationResult<Mascota>>
@@ -65,6 +75,8 @@ internal sealed class DeleteMascotaHandler(VetCareDbContext db) : IRequestHandle
     {
         var mascota = await db.Mascotas.FindAsync([request.Id], cancellationToken);
         if (mascota is null) return new(404);
+        if (await db.ConsultasMedicas.AnyAsync(c => c.MascotaId == request.Id, cancellationToken))
+            return new(409, Message: "No se puede eliminar una mascota con consultas médicas registradas.");
         db.Mascotas.Remove(mascota);
         await db.SaveChangesAsync(cancellationToken);
         return new(204, true);

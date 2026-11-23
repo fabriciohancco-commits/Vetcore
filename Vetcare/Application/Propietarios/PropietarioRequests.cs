@@ -6,15 +6,25 @@ using Vetcare.Infrastructure.Persistence;
 
 namespace Vetcare.Application.Propietarios;
 
-public sealed record  ListPropietariosQuery : IRequest<List<Propietario>>;
+public sealed record ListPropietariosQuery(string? Search = null) : IRequest<List<Propietario>>;
 public sealed record CreatePropietarioCommand(Propietario Propietario) : IRequest<OperationResult<Propietario>>;
 public sealed record UpdatePropietarioCommand(int Id, Propietario Propietario) : IRequest<OperationResult<Propietario>>;
 public sealed record DeletePropietarioCommand(int Id) : IRequest<OperationResult<bool>>;
 
 internal sealed class ListPropietariosHandler(VetCareDbContext db) : IRequestHandler<ListPropietariosQuery, List<Propietario>>
 {
-    public Task<List<Propietario>> Handle(ListPropietariosQuery request, CancellationToken cancellationToken) =>
-        db.Propietarios.AsNoTracking().OrderBy(p => p.Apellidos).ThenBy(p => p.Nombres).ToListAsync(cancellationToken);
+    public Task<List<Propietario>> Handle(ListPropietariosQuery request, CancellationToken cancellationToken)
+    {
+        var propietarios = db.Propietarios.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(request.Search))
+        {
+            var term = request.Search.Trim();
+            propietarios = propietarios.Where(p => p.Nombres.Contains(term) || p.Apellidos.Contains(term) ||
+                p.Telefono.Contains(term) || (p.Correo != null && p.Correo.Contains(term)));
+        }
+
+        return propietarios.OrderBy(p => p.Apellidos).ThenBy(p => p.Nombres).ToListAsync(cancellationToken);
+    }
 }
 
 internal sealed class CreatePropietarioHandler(VetCareDbContext db) : IRequestHandler<CreatePropietarioCommand, OperationResult<Propietario>>
