@@ -428,13 +428,14 @@ textarea {
 }
 .button,.btn {
   border:0;
-  border-radius:9px;
-  background:linear-gradient(135deg,#198467,#176b55);
+  border-radius:11px;
+  background:linear-gradient(135deg,var(--brand),var(--brand-deep));
   color:#fff;
   font-weight:700;
-  padding:11px 15px;
+  padding:12px 17px;
   cursor:pointer;
-  box-shadow:0 4px 10px #176b5525
+  box-shadow:0 6px 14px #087b6626;
+  transition:transform .18s,box-shadow .18s,filter .18s
 }
 .button.secondary {
   background:#edf2ef;
@@ -442,7 +443,9 @@ textarea {
   box-shadow:none
 }
 .button:hover,.btn:hover {
-  filter:brightness(.96)
+  filter:brightness(1.04);
+  transform:translateY(-1px);
+  box-shadow:0 9px 18px #087b6633
 }
 .button:focus-visible,.btn:focus-visible,.small:focus-visible,.tab:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible {
   outline:3px solid #4cae8d;
@@ -473,9 +476,9 @@ textarea {
   gap:10px
 }
 .card {
-  border:1px solid #e6ece8;
-  border-radius:13px;
-  padding:15px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:17px;
   display:flex;
   justify-content:space-between;
   gap:12px;
@@ -483,9 +486,9 @@ textarea {
   transition:border-color .18s,box-shadow .18s,transform .18s
 }
 .card:hover {
-  border-color:#c9ded1;
-  box-shadow:0 6px 16px #193d2b0b;
-  transform:translateY(-1px)
+  border-color:#abd1c0;
+  box-shadow:0 10px 24px #163d3212;
+  transform:translateY(-2px)
 }
 .card h3 {
   font-size:15px;
@@ -521,8 +524,8 @@ textarea {
 .species-badge {
   padding:4px 8px;
   border-radius:99px;
-  background:#e8f3ec;
-  color:#176b55;
+  background:var(--brand-light);
+  color:var(--brand-deep);
   font-size:11px;
   font-weight:700;
   letter-spacing:.02em
@@ -561,13 +564,14 @@ textarea {
   font-size:12px;
   padding:7px 10px;
   border-radius:8px;
-  border:1px solid #dce4df;
+  border:1px solid var(--line);
   background:white;
   color:#43514b;
   cursor:pointer
 }
 .small.danger {
-  color:#a34036
+  color:var(--danger);
+  background:#fff8f7
 }
 .empty {
   padding:36px 12px;
