@@ -14,6 +14,12 @@ public sealed class VetCareDbContext(
     public DbSet<ConsultaMedica> ConsultasMedicas =>
         Set<ConsultaMedica>();
 
+    public DbSet<Medicamento> Medicamentos => Set<Medicamento>();
+
+    public DbSet<Prescripcion> Prescripciones => Set<Prescripcion>();
+
+    public DbSet<Operacion> Operaciones => Set<Operacion>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Propietario>()
@@ -26,6 +32,24 @@ public sealed class VetCareDbContext(
             .HasOne(c => c.Mascota)
             .WithMany()
             .HasForeignKey(c => c.MascotaId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Prescripcion>()
+            .HasOne(p => p.Mascota)
+            .WithMany()
+            .HasForeignKey(p => p.MascotaId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Prescripcion>()
+            .HasOne(p => p.Medicamento)
+            .WithMany()
+            .HasForeignKey(p => p.MedicamentoId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Operacion>()
+            .HasOne(o => o.Mascota)
+            .WithMany()
+            .HasForeignKey(o => o.MascotaId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
