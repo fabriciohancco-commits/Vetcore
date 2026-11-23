@@ -3,6 +3,7 @@ import { apiRequest, escapeHtml, setStatus } from "./api.js";
 const fromInput = document.getElementById("desde");
 const toInput = document.getElementById("hasta");
 const veterinarianInput = document.getElementById("vet");
+const filterForm = document.getElementById("report-filter-form");
 const runButton = document.getElementById("run");
 const message = document.getElementById("msg");
 const summary = document.getElementById("summary");
@@ -72,4 +73,15 @@ async function loadReport() {
   }
 }
 
-runButton.addEventListener("click", loadReport);
+filterForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  loadReport();
+});
+
+filterForm.addEventListener("reset", () => {
+  window.requestAnimationFrame(() => {
+    setStatus(message, "");
+    summary.replaceChildren();
+    list.replaceChildren();
+  });
+});

@@ -11,12 +11,13 @@
 <section class="page-intro"><div class="eyebrow">Resumen de actividad</div><h1>Reportes de atenciones</h1><p>Explora la actividad clínica por fechas y veterinario.</p></section>
 <section class="panel">
   <div class="section-heading"><div><h2>Filtrar atenciones</h2><p>Elige un rango de fechas y, si deseas, un veterinario.</p></div></div>
-  <div class="filter-bar report-filters">
+  <form id="report-filter-form" class="filter-bar report-filters">
     <div class="field"><label for="desde">Desde</label><input id="desde" type="date"></div>
     <div class="field"><label for="hasta">Hasta</label><input id="hasta" type="date"></div>
     <div class="field"><label for="vet">Veterinario</label><input id="vet" placeholder="Todos los veterinarios"></div>
-    <button class="button" id="run" type="button">Generar reporte</button>
-  </div>
+    <button class="button" id="run" type="submit">Generar reporte</button>
+    <button class="button secondary" type="reset">Limpiar filtros</button>
+  </form>
   <div id="msg" class="notice" role="status" aria-live="polite"></div><div id="summary" class="report-summary" aria-live="polite"></div><div id="list" class="record-list"></div>
 </section>
 <script type="module" src="js/reportes.js"></script></main></body></html>
