@@ -25,9 +25,11 @@ Abre `Vetcare.sln`, selecciona el perfil **VetCare** y pulsa **Run**. El perfil 
 
 - Registrar, listar, editar y eliminar propietarios.
 - Registrar, listar, editar y eliminar mascotas.
+- Buscar propietarios por nombre, teléfono o correo y mascotas por nombre, especie o raza.
 - Asociar cada mascota con su propietario.
 - Validar campos, correo, teléfono, peso y fechas.
 - Evitar eliminar propietarios que todavía tienen mascotas asociadas.
+- Evitar eliminar mascotas que tienen consultas médicas en su historial.
 
 ## Organización
 
