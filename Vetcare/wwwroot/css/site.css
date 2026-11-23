@@ -206,15 +206,16 @@ body {
   gap:18px
 }
 .panel {
-  background:#fff;
-  border:1px solid #e3ebe6;
-  border-radius:18px;
-  padding:24px;
-  box-shadow:0 8px 24px #233c300c
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:26px;
+  box-shadow:var(--shadow-card)
 }
 .panel h2 {
   font-size:18px;
-  margin:0 0 18px
+  margin:0 0 18px;
+  letter-spacing:-.02em
 }
 .page-intro {
   margin:0 0 20px;
@@ -310,11 +311,14 @@ body {
   margin-top:14px
 }
 .record-card {
-  padding:18px;
-  border:1px solid #e3ebe6;
-  border-radius:14px;
-  background:linear-gradient(135deg,#fff,#fbfdfb)
+  padding:20px;
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:linear-gradient(135deg,#fff,var(--surface-soft));
+  box-shadow:0 5px 16px #163d3208;
+  transition:border-color .2s,transform .2s,box-shadow .2s
 }
+.record-card:hover { border-color:#b8d8cb; transform:translateY(-2px); box-shadow:0 12px 24px #163d3212 }
 .record-header {
   display:flex;
   align-items:flex-start;
