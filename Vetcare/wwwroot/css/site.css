@@ -369,31 +369,34 @@ body {
 .field {
   display:flex;
   flex-direction:column;
-  gap:6px
+  gap:8px
 }
 .field.full {
   grid-column:1/-1
 }
 label {
   font-size:12px;
-  font-weight:650;
-  color:#51605b
+  font-weight:700;
+  color:var(--ink-soft)
 }
 input,select,textarea {
   width:100%;
-  border:1px solid #d9e1dc;
-  border-radius:9px;
-  background:white;
-  padding:10px 11px;
+  border:1px solid #d4e2dc;
+  border-radius:11px;
+  background:#fcfefd;
+  padding:12px 13px;
   font:inherit;
   font-size:14px;
-  color:#182522;
-  outline:none
+  color:var(--ink);
+  outline:none;
+  transition:border-color .18s,box-shadow .18s,background .18s
 }
 input:focus,select:focus,textarea:focus {
-  border-color:#27856d;
-  box-shadow:0 0 0 3px #27856d20
+  border-color:var(--brand);
+  background:#fff;
+  box-shadow:0 0 0 4px #087b661c
 }
+input::placeholder,textarea::placeholder { color:#9aa9a3 }
 textarea {
   resize:vertical;
   min-height:72px
