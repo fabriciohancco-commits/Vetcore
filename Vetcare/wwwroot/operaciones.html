@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Operaciones | VetCare Manager</title>
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body><main class="shell">
+  <header class="top site-header"><a class="brand" href="index.html"><span class="mark">✚</span><span>VetCare Manager</span></a><nav class="tabs site-nav" aria-label="Secciones">
+    <a class="tab" href="index.html">Pacientes</a><a class="tab" href="consultas.html">Consultas</a><a class="tab" href="historial.html">Historial</a><a class="tab" href="farmacia.html">Farmacia</a><a class="tab active" href="operaciones.html" aria-current="page">Operaciones</a><a class="tab" href="reportes.html">Reportes</a>
+  </nav></header>
+  <section class="page-intro"><div class="eyebrow">Agenda de procedimientos</div><h1>Operaciones</h1><p>Programa procedimientos clínicos y da seguimiento a su estado.</p></section>
+  <section class="layout operations-layout">
+    <form id="operation-form" class="panel"><h2>Programar operación</h2><div class="fields">
+      <div class="field full"><label for="operation-pet">Mascota *</label><select id="operation-pet" required><option value="">Cargando mascotas…</option></select></div>
+      <div class="field full"><label for="operation-type">Procedimiento *</label><input id="operation-type" required minlength="3" maxlength="140" placeholder="Nombre del procedimiento"></div>
+      <div class="field"><label for="operation-vet">Veterinario *</label><input id="operation-vet" required maxlength="150"></div>
+      <div class="field"><label for="operation-date">Fecha y hora *</label><input id="operation-date" type="datetime-local" required></div>
+      <div class="field full"><label for="operation-notes">Notas de organización</label><textarea id="operation-notes" maxlength="800" rows="3" placeholder="Preparación o seguimiento administrativo"></textarea></div>
+    </div><div class="actions"><button class="button" type="submit">Guardar operación</button></div><div id="operation-notice" class="notice" role="status" aria-live="polite"></div></form>
+    <section class="panel"><div class="list-head"><h2>Agenda de operaciones</h2><button class="small" id="reload-operations" type="button">Actualizar</button></div><div id="operation-list" class="record-list" aria-live="polite"></div></section>
+  </section>
+  <footer class="foot">VetCare Manager · Operaciones</footer>
+</main><script type="module" src="js/operaciones.js"></script></body></html>
