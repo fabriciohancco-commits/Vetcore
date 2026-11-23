@@ -30,6 +30,11 @@ Abre `Vetcare.sln`, selecciona el perfil **VetCare** y pulsa **Run**. El perfil 
 - Validar campos, correo, teléfono, peso y fechas.
 - Evitar eliminar propietarios que todavía tienen mascotas asociadas.
 - Evitar eliminar mascotas que tienen consultas médicas en su historial.
+- Registrar medicamentos con control de existencias, stock mínimo, vencimiento y condición de receta.
+- Asociar a cada mascota las indicaciones transcritas por un veterinario; los medicamentos que requieren receta solicitan su número.
+- Programar operaciones y actualizar su estado (programada, en curso, completada o cancelada).
+
+Las indicaciones clínicas son registradas por el profesional veterinario. El sistema no recomienda fármacos ni calcula dosis.
 
 ## Organización
 
@@ -46,8 +51,8 @@ Vetcore/
 └── Vetcare.Infrastructure/   # EF Core, SQLite y adaptadores
 ```
 
-Cada proyecto tiene su propio `.csproj` y referencias explícitas. Los contratos de los repositorios están en Domain; Application los usa en sus casos de uso; Infrastructure implementa esos contratos con EF Core; API conecta los servicios y expone los endpoints. La interfaz comparte `Vetcare/wwwroot/css/site.css` y mantiene la navegación entre sus cuatro pantallas.
+Cada proyecto tiene su propio `.csproj` y referencias explícitas. Los contratos de los repositorios están en Domain; Application los usa en sus casos de uso; Infrastructure implementa esos contratos con EF Core; API conecta los servicios y expone los endpoints. La interfaz comparte `Vetcare/wwwroot/css/site.css` y mantiene navegación entre pacientes, consultas, historial, farmacia, operaciones y reportes.
 
-En la interfaz, `Vetcare/wwwroot/js/api.js` concentra las llamadas HTTP y utilidades compartidas. Cada pantalla usa un módulo independiente: `dashboard.js`, `consultas.js`, `historial.js` o `reportes.js`.
+En la interfaz, `Vetcare/wwwroot/js/api.js` concentra las llamadas HTTP y utilidades compartidas. Cada pantalla usa un módulo independiente: `dashboard.js`, `consultas.js`, `historial.js`, `farmacia.js`, `operaciones.js` o `reportes.js`.
 
 La base de datos SQLite se crea al iniciar la aplicación. Los archivos de compilación y las preferencias locales de Rider se excluyen de Git.
