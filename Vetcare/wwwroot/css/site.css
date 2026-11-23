@@ -1,7 +1,20 @@
 :root {
+  --ink:#142c2d;
+  --ink-soft:#405a58;
+  --muted:#718481;
+  --brand:#087b66;
+  --brand-deep:#07564b;
+  --brand-light:#e0f3ec;
+  --accent:#f6b96b;
+  --surface:#fff;
+  --surface-soft:#f7fbf9;
+  --line:#dce9e4;
+  --danger:#bd5146;
+  --shadow-card:0 12px 32px #163d3210;
+  color-scheme:light;
   font-family:Inter,"Segoe UI",sans-serif;
-  color:#182522;
-  background:#f3f7f4;
+  color:var(--ink);
+  background:#f2f7f5;
   font-synthesis:none;
   font-weight:400
 }
@@ -10,7 +23,10 @@
 }
 body {
   margin:0;
-  background:radial-gradient(ellipse at 12% 0%,#dcefe6 0,transparent 31rem),#f3f7f4
+  background:
+    radial-gradient(ellipse at 10% 0%,#d9eee7 0,transparent 34rem),
+    radial-gradient(ellipse at 95% 30%,#fff0da 0,transparent 30rem),
+    #f2f7f5
 }
 .shell {
   max-width:1240px;
