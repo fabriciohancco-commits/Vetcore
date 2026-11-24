@@ -5,7 +5,7 @@ using Vetcare.Domain.Entities;
 
 namespace Vetcare.Application.Mascotas;
 
-public sealed record ListMascotasQuery : IRequest<List<Mascota>>;
+public sealed record ListMascotasQuery(string? Search = null) : IRequest<List<Mascota>>;
 public sealed record CreateMascotaCommand(Mascota Mascota) : IRequest<OperationResult<Mascota>>;
 public sealed record UpdateMascotaCommand(int Id, Mascota Mascota) : IRequest<OperationResult<Mascota>>;
 public sealed record DeleteMascotaCommand(int Id) : IRequest<OperationResult<bool>>;
@@ -13,7 +13,7 @@ public sealed record DeleteMascotaCommand(int Id) : IRequest<OperationResult<boo
 internal sealed class ListMascotasHandler(IMascotaRepository repository) : IRequestHandler<ListMascotasQuery, List<Mascota>>
 {
     public Task<List<Mascota>> Handle(ListMascotasQuery request, CancellationToken cancellationToken) =>
-        repository.ListAsync(cancellationToken);
+        repository.ListAsync(request.Search, cancellationToken);
 }
 
 internal sealed class CreateMascotaHandler(IMascotaRepository repository, IPropietarioRepository propietarios, IUnitOfWork unitOfWork) : IRequestHandler<CreateMascotaCommand, OperationResult<Mascota>>
@@ -64,6 +64,8 @@ internal sealed class DeleteMascotaHandler(IMascotaRepository repository, IUnitO
     {
         var mascota = await repository.FindByIdAsync(request.Id, cancellationToken);
         if (mascota is null) return new(404);
+        if (await repository.HasConsultasAsync(request.Id, cancellationToken))
+            return new(409, Message: "No se puede eliminar una mascota con consultas médicas registradas.");
         repository.Remove(mascota);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return new(204, true);

@@ -5,7 +5,7 @@ using Vetcare.Domain.Entities;
 
 namespace Vetcare.Application.Propietarios;
 
-public sealed record  ListPropietariosQuery : IRequest<List<Propietario>>;
+public sealed record ListPropietariosQuery(string? Search = null) : IRequest<List<Propietario>>;
 public sealed record CreatePropietarioCommand(Propietario Propietario) : IRequest<OperationResult<Propietario>>;
 public sealed record UpdatePropietarioCommand(int Id, Propietario Propietario) : IRequest<OperationResult<Propietario>>;
 public sealed record DeletePropietarioCommand(int Id) : IRequest<OperationResult<bool>>;
@@ -13,7 +13,7 @@ public sealed record DeletePropietarioCommand(int Id) : IRequest<OperationResult
 internal sealed class ListPropietariosHandler(IPropietarioRepository repository) : IRequestHandler<ListPropietariosQuery, List<Propietario>>
 {
     public Task<List<Propietario>> Handle(ListPropietariosQuery request, CancellationToken cancellationToken) =>
-        repository.ListAsync(cancellationToken);
+        repository.ListAsync(request.Search, cancellationToken);
 }
 
 internal sealed class CreatePropietarioHandler(IPropietarioRepository repository, IUnitOfWork unitOfWork) : IRequestHandler<CreatePropietarioCommand, OperationResult<Propietario>>

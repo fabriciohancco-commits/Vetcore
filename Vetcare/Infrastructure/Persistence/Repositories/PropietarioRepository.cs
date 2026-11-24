@@ -6,8 +6,17 @@ namespace Vetcare.Infrastructure.Persistence.Repositories;
 
 public sealed class PropietarioRepository(VetCareDbContext db) : IPropietarioRepository
 {
-    public Task<List<Propietario>> ListAsync(CancellationToken ct) =>
-        db.Propietarios.AsNoTracking().OrderBy(p => p.Apellidos).ThenBy(p => p.Nombres).ToListAsync(ct);
+    public Task<List<Propietario>> ListAsync(string? search, CancellationToken ct)
+    {
+        var query = db.Propietarios.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var term = search.Trim();
+            query = query.Where(p => p.Nombres.Contains(term) || p.Apellidos.Contains(term) ||
+                p.Telefono.Contains(term) || (p.Correo != null && p.Correo.Contains(term)));
+        }
+        return query.OrderBy(p => p.Apellidos).ThenBy(p => p.Nombres).ToListAsync(ct);
+    }
     public Task<Propietario?> FindByIdAsync(int id, CancellationToken ct) => db.Propietarios.FindAsync([id], ct).AsTask();
     public Task<bool> ExistsAsync(int id, CancellationToken ct) => db.Propietarios.AnyAsync(p => p.Id == id, ct);
     public Task<bool> HasMascotasAsync(int id, CancellationToken ct) => db.Mascotas.AnyAsync(m => m.PropietarioId == id, ct);
