@@ -1,25 +1,14 @@
 /** Sends a JSON request to a VetCare API endpoint and returns its response. */
 export async function apiRequest(path, options = {}) {
-  const token = sessionStorage.getItem("vetcare-access-token");
-  if (!token) {
-    window.location.replace("/login.html");
-    throw new Error("Inicia sesión para continuar.");
-  }
-
   const response = await fetch(`/api/${path}`, {
     ...options,
     headers: {
       ...(options.body ? { "Content-Type": "application/json" } : {}),
-      Authorization: `Bearer ${token}`,
       ...(options.headers || {}),
     },
   });
 
   if (!response.ok) {
-    if (response.status === 401) {
-      sessionStorage.removeItem("vetcare-access-token");
-      window.location.replace("/login.html");
-    }
     const body = await response.text();
     let data = {};
     try { data = body ? JSON.parse(body) : {}; } catch { /* Keep the status-based message. */ }
@@ -32,12 +21,6 @@ export async function apiRequest(path, options = {}) {
 
   return response.status === 204 ? null : response.json();
 }
-
-document.addEventListener("click", (event) => {
-  if (!event.target.closest("[data-logout]")) return;
-  sessionStorage.removeItem("vetcare-access-token");
-  window.location.replace("/login.html");
-});
 
 /** Escapes API values before inserting them into an HTML template. */
 export function escapeHtml(value) {

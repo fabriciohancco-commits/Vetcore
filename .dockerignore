@@ -1,0 +1,8 @@
+.git
+.idea
+**/bin
+**/obj
+Vetcare/vetcare.db
+Vetcare/vetcare.db-shm
+Vetcare/vetcare.db-wal
+Vetcare/vetcare.db-journal

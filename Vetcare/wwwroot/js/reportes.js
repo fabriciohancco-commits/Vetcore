@@ -87,22 +87,11 @@ filterForm.addEventListener("submit", (event) => {
 
 pdfButton.addEventListener("click", async () => {
   if (!hasValidDateRange()) return;
-  const token = sessionStorage.getItem("vetcare-access-token");
-  if (!token) {
-    window.location.replace("/login.html");
-    return;
-  }
   pdfButton.disabled = true;
   setStatus(message, "Preparando el PDF...");
   try {
-    const response = await fetch(`/api/reportes/atenciones/pdf?${reportQuery()}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await fetch(`/api/reportes/atenciones/pdf?${reportQuery()}`);
     if (!response.ok) {
-      if (response.status === 401) {
-        sessionStorage.removeItem("vetcare-access-token");
-        window.location.replace("/login.html");
-      }
       throw new Error(`La descarga falló (HTTP ${response.status}).`);
     }
     const blob = await response.blob();

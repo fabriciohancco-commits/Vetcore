@@ -1246,37 +1246,3 @@ input:focus,select:focus,textarea:focus { border-color:#0a856b; box-shadow:0 0 0
   .reports-panel .report-filters { grid-template-columns:minmax(0,1fr) }
   .reports-panel .report-filters .button { width:100%; justify-content:center }
 }
-.login-page { display:grid; min-height:100vh; place-items:center; padding:30px; background:#f2f6f3 }
-.login-shell { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(430px,.92fr); width:min(1080px,100%); min-height:640px; overflow:hidden; border:1px solid #e4ebe6; border-radius:22px; background:#fff; box-shadow:0 24px 70px #143d3218 }
-.login-brand-panel { position:relative; display:flex; flex-direction:column; overflow:hidden; padding:37px; background:linear-gradient(145deg,#164b41,#10362f); color:#fff }
-.login-page .brand { z-index:1; margin:0; color:#fff; font-size:19px }
-.login-page .mark { background:#f4fbf8; color:#146550 }
-.login-page .brand-copy small { color:#9ec6b5 }
-.login-brand-copy { z-index:1; max-width:430px; margin:auto 0 }
-.login-brand-copy .eyebrow { color:#9fdfc0; font-size:9px }
-.login-brand-copy h1 { margin:15px 0 12px; color:#f7fcf8; font-size:clamp(32px,4vw,46px); letter-spacing:-.055em; line-height:1.08 }
-.login-brand-copy p { max-width:380px; margin:0; color:#bad3c7; font-size:13px; line-height:1.7 }
-.login-decoration { position:absolute; right:-35px; bottom:-105px; color:#ffffff0c; font-size:380px; font-weight:800; line-height:1 }
-.login-form-panel { display:flex; flex-direction:column; justify-content:center; padding:50px clamp(35px,6vw,70px) 28px }
-.login-card { width:100%; max-width:390px; margin:auto }
-.login-kicker { color:#168267; font-size:9px; font-weight:750; letter-spacing:.15em }
-.login-card h2 { margin:10px 0 7px; color:#1a3731; font-size:29px; letter-spacing:-.045em }
-.login-card > p { margin:0 0 25px; color:#7a8982; font-size:12px; line-height:1.6 }
-.login-card form { display:grid; gap:17px }
-.login-card .field { gap:7px }
-.login-card label { font-size:11px }
-.login-card input { min-height:46px; border-radius:10px; font-size:12px }
-.login-card .button { min-height:46px; display:flex; justify-content:center; align-items:center; gap:10px; margin-top:3px; border-radius:10px; font-size:12px }
-.login-card .notice { min-height:0; margin:0; font-size:11px; line-height:1.5 }
-.login-footer { margin:26px auto 0; color:#9aa59f; font-size:10px }
-.login-footer span { padding:0 3px }
-@media(max-width:760px) {
-  .login-page { padding:15px }
-  .login-shell { grid-template-columns:minmax(0,1fr); min-height:0; max-width:500px }
-  .login-brand-panel { min-height:230px; padding:24px }
-  .login-brand-copy { margin:auto 0 0; padding-top:36px }
-  .login-brand-copy h1 { margin:9px 0; font-size:27px }
-  .login-brand-copy p { font-size:11px }
-  .login-decoration { right:-12px; bottom:-160px; font-size:280px }
-  .login-form-panel { padding:30px 24px 22px }
-}

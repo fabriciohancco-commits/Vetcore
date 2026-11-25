@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: vetcare-manager
+    runtime: docker
+    plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /index.html
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production

@@ -1,47 +1,11 @@
 @baseUrl = http://localhost:5002
-@token = pega-aqui-el-accessToken-del-login
-
-### Estado de la configuración de acceso
-GET {{baseUrl}}/api/auth/estado
-Accept: application/json
-
-### Crear el primer administrador (solo Development y base sin usuarios)
-POST {{baseUrl}}/api/auth/configuracion-inicial
-Content-Type: application/json
-
-{
-  "correo": "admin@vetcare.local",
-  "contrasena": "Cambiar-Esta-Clave-2026!"
-}
-
-### Login (copiar accessToken de la respuesta a @token)
-POST {{baseUrl}}/api/auth/login
-Content-Type: application/json
-
-{
-  "correo": "admin@vetcare.local",
-  "contrasena": "Cambiar-Esta-Clave-2026!"
-}
-
-### Crear usuario con rol (solo Administrador)
-POST {{baseUrl}}/api/auth/usuarios
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "correo": "veterinario@vetcare.local",
-  "contrasena": "Clave-Segura-Para-Vet-2026!",
-  "rol": "Veterinario"
-}
 
 ### Listar propietarios
 GET {{baseUrl}}/api/propietarios
-Authorization: Bearer {{token}}
 Accept: application/json
 
 ### Registrar propietario
 POST {{baseUrl}}/api/propietarios
-Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -54,12 +18,10 @@ Content-Type: application/json
 
 ### Buscar mascotas
 GET {{baseUrl}}/api/mascotas?search=Kira
-Authorization: Bearer {{token}}
 Accept: application/json
 
 ### Registrar consulta (usa un MascotaId existente)
 POST {{baseUrl}}/api/consultas
-Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -74,7 +36,6 @@ Content-Type: application/json
 
 ### Agendar cita (IDs existentes; un veterinario no puede tener cruce horario)
 POST {{baseUrl}}/api/citas
-Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -88,12 +49,10 @@ Content-Type: application/json
 
 ### Consultar medicamentos
 GET {{baseUrl}}/api/farmacia/medicamentos
-Authorization: Bearer {{token}}
 Accept: application/json
 
-### Registrar medicamento (Administrador o Recepcionista)
+### Registrar medicamento
 POST {{baseUrl}}/api/farmacia/medicamentos
-Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -107,7 +66,6 @@ Content-Type: application/json
 
 ### Registrar prescripción y descontar unidades (usa IDs existentes)
 POST {{baseUrl}}/api/farmacia/prescripciones
-Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -122,12 +80,10 @@ Content-Type: application/json
   "indicaciones": "Administrar con alimento"
 }
 
-### Reporte JSON por fechas (Administrador o Veterinario)
+### Reporte JSON por fechas
 GET {{baseUrl}}/api/reportes/atenciones?desde=2026-01-01&hasta=2026-12-31
-Authorization: Bearer {{token}}
 Accept: application/json
 
 ### Reporte descargable PDF
 GET {{baseUrl}}/api/reportes/atenciones/pdf?desde=2026-01-01&hasta=2026-12-31
-Authorization: Bearer {{token}}
 Accept: application/pdf

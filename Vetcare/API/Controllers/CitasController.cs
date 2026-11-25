@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vetcare.API.DTOs;
 using Vetcare.Application.UseCases.Citas.Commands;
@@ -7,7 +6,6 @@ using Vetcare.Application.UseCases.Citas.Queries;
 
 namespace Vetcare.API.Controllers;
 
-[Authorize(Roles = "Administrador,Veterinario,Recepcionista")]
 [ApiController]
 [Route("api/citas")]
 public sealed class CitasController(ISender sender) : ControllerBase

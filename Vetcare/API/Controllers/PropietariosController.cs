@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vetcare.API.DTOs;
 using Vetcare.Application.UseCases.Propietarios.Commands;
@@ -7,7 +6,6 @@ using Vetcare.Application.UseCases.Propietarios.Queries;
 
 namespace Vetcare.API.Controllers;
 
-[Authorize(Roles = "Administrador,Veterinario,Recepcionista")]
 [ApiController]
 [Route("api/propietarios")]
 public sealed class PropietariosController(ISender sender) : ControllerBase

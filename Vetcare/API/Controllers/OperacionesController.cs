@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vetcare.API.DTOs;
 using Vetcare.Application.UseCases.Operaciones.Commands;
@@ -7,7 +6,6 @@ using Vetcare.Application.UseCases.Operaciones.Queries;
 
 namespace Vetcare.API.Controllers;
 
-[Authorize(Roles = "Administrador,Veterinario,Recepcionista")]
 [ApiController]
 [Route("api/operaciones")]
 public sealed class OperacionesController(ISender sender) : ControllerBase
@@ -17,7 +15,6 @@ public sealed class OperacionesController(ISender sender) : ControllerBase
         Ok((await sender.Send(new ListOperacionesQuery(), cancellationToken)).Select(x => x.ToDto()).ToList());
 
     [HttpPost]
-    [Authorize(Roles = "Administrador,Veterinario")]
     public async Task<IActionResult> Crear(OperacionRequestDto input, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new CreateOperacionCommand(input.ToEntity()), cancellationToken);
@@ -27,12 +24,10 @@ public sealed class OperacionesController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id:int}/estado")]
-    [Authorize(Roles = "Administrador,Veterinario")]
     public async Task<IActionResult> ActualizarEstado(int id, UpdateEstadoOperacionDto input, CancellationToken cancellationToken) =>
         this.ToActionResult(await sender.Send(new UpdateEstadoOperacionCommand(id, input.Estado), cancellationToken));
 
     [HttpDelete("{id:int}")]
-    [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Eliminar(int id, CancellationToken cancellationToken) =>
         this.ToActionResult(await sender.Send(new DeleteOperacionCommand(id), cancellationToken));
 }

@@ -62,4 +62,10 @@ La base de datos SQLite se crea al iniciar la aplicación y conserva localmente 
 
 Sistema de gestión veterinaria con API REST en ASP.NET Core .NET 8, arquitectura por capas, casos de uso CQRS con MediatR, EF Core y SQLite. Incluye módulos de propietarios, mascotas, consultas clínicas, citas, farmacia, operaciones y reportes.
 
-La documentación para ejecutar la API, autenticación JWT y roles, rutas, ejemplos de solicitudes, reglas de negocio y migraciones está en [docs/api.md](docs/api.md). El diseño de capas se describe en [docs/arquitectura.md](docs/arquitectura.md). Los ejemplos para probar endpoints desde Rider o Visual Studio están en `Vetcare/Vetcare.http`.
+La documentación de rutas, ejemplos de solicitudes, reglas de negocio y migraciones está en [docs/api.md](docs/api.md). El diseño de capas se describe en [docs/arquitectura.md](docs/arquitectura.md). Los ejemplos para probar endpoints desde Rider o Visual Studio están en `Vetcare/Vetcare.http`.
+
+## Desplegar en Render
+
+El repositorio incluye `Dockerfile` y `render.yaml` para crear un Web Service desde la rama `main` mediante un Blueprint. La aplicación abre directamente el panel, sin login.
+
+La interfaz y la API son públicas: cualquier persona con el enlace puede consultar, agregar, cambiar o borrar los registros. No uses datos reales o privados en este despliegue. El plan gratuito usa almacenamiento efímero: los datos SQLite pueden perderse al reiniciar o desplegar.

@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -8,7 +7,6 @@ using Vetcare.Application.UseCases.Reportes.Queries;
 
 namespace Vetcare.API.Controllers;
 
-[Authorize(Roles = "Administrador,Veterinario")]
 [ApiController]
 [Route("api/reportes")]
 public sealed class ReportesController(ISender sender) : ControllerBase
